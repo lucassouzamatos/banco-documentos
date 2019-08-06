@@ -1,2 +1,8 @@
-# banco-documentos
-projeto de aplicação de engenharia de software
+# Banco de propriedade intelectual
+
+ - Artigos
+ - Músicas
+ - Audiovisual
+ - Fotos
+ 
+ - Postagem, comentários, discussão, avaliação.
