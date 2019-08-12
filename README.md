@@ -7,10 +7,10 @@
 * Agenda
 * Horários
 
+### Resumo de funcionalidades
 * Upload de imagens para cadastro de artes
 * Agendamento de horário
-
-* Autententicação
+* Autenticação
 * Cadastro de Estudio
 * Cadastro de Artista
 * Cadastro de Artes
