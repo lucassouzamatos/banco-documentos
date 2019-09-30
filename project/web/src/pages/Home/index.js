@@ -1,7 +1,18 @@
 import React from 'react';
 
-// import { Container } from './styles';
+import { Container, ButtonContainer, Button } from './styles';
 
 export default function Home() {
-  return <h1>Home</h1>;
+  return (
+    <Container>
+      <ButtonContainer>
+        <Button to="#" background="#292C2F">
+          Sou um cliente
+        </Button>
+        <Button to="/login" background="#D9A327">
+          Sou um tatuador/estúdio
+        </Button>
+      </ButtonContainer>
+    </Container>
+  );
 }

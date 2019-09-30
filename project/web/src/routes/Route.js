@@ -4,6 +4,7 @@ import { Route, Redirect } from 'react-router-dom';
 
 import ArtistStudioLayout from '~/pages/_layouts/ArtistStudio';
 import ClientLayout from '../pages/_layouts/Client';
+import DefaultLayout from '../pages/_layouts/Default';
 
 export default function RouteWrapper({
   component: Component,
@@ -21,7 +22,7 @@ export default function RouteWrapper({
     return <Redirect to="/profile" />;
   }
 
-  const Layout = client ? ClientLayout : ArtistStudioLayout;
+  const Layout = signed ? (client ? ClientLayout : ArtistStudioLayout) : DefaultLayout;
 
   return (
     <Route

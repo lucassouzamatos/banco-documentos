@@ -41,4 +41,8 @@ export default createGlobalStyle`
   button {
     cursor: pointer;
   }
+
+  label {
+    color: #9E9EA5;
+  }
 `;

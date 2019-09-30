@@ -1,7 +1,7 @@
 import React from 'react';
 
-// import { Container } from './styles';
+import { Title } from '~/components/Styled/Title';
 
 export default function Profile() {
-  return <h1>Profile</h1>;
+  return <Title>Dados</Title>;
 }
