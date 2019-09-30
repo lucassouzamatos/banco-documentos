@@ -6,12 +6,14 @@ import ArtistStudioLayout from '~/pages/_layouts/ArtistStudio';
 import ClientLayout from '../pages/_layouts/Client';
 import DefaultLayout from '../pages/_layouts/Default';
 
+import { store } from '~/store';
+
 export default function RouteWrapper({
   component: Component,
   isPrivate,
   ...rest
 }) {
-  const signed = false;
+  const { signed } = store.getState().auth;
   const client = false;
 
   if (!signed && isPrivate) {
