@@ -11,7 +11,7 @@ export default function RouteWrapper({
   isPrivate,
   ...rest
 }) {
-  const signed = true;
+  const signed = false;
   const client = false;
 
   if (!signed && isPrivate) {
