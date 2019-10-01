@@ -20,5 +20,5 @@ Route.group(() => {
   Route.get('users', 'UserController.index')
   Route.post('users', 'UserController.store')
   Route.put('users/:id', 'UserController.update')
-  // Route.post('users', closure)
+  Route.post('auth', 'UserController.auth')
 }).prefix('api/v1')
