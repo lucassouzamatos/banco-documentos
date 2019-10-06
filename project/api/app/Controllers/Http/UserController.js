@@ -39,7 +39,7 @@ class UserController extends BaseController {
     return await User.findOrFail(params.id)
   }
 
-  async store({ request }) {
+  async store({ response, request }) {
     const data = request.only([
       "username",
       "email",
@@ -52,11 +52,25 @@ class UserController extends BaseController {
     ]);
 
     const user = await User.create(data)
-    return user
+    return this.responseSuccess({
+      response,
+      statusCode: 200,
+      data: {
+        user
+      }
+    })
   }
 
-  async update({ params, request }) {
+  async update({ response, params, request }) {
     const user = await User.findOrFail(params.id)
+
+    if (!user) {
+      return this.responseError({
+        response,
+        statusCode: 400,
+        errors: ["Usuário não encontrado"]
+      })
+    }
 
     const data = request.only([
       "username",
@@ -70,7 +84,13 @@ class UserController extends BaseController {
     await user.merge({ ...data })
     await user.save()
 
-    return user
+    return this.responseSuccess({
+      response,
+      statusCode: 200,
+      data: {
+        user
+      }
+    })
   }
 }
 
