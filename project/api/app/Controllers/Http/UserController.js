@@ -1,12 +1,33 @@
 'use strict'
 const User = use('App/Models/User')
+const BaseController = use('App/Controllers/Http/BaseController')
 
-class UserController {
-  async auth() {
+class UserController extends BaseController {
+  constructor() {
+    super()
+  }
+
+  async auth({ request, auth, response }) {
     const { email, password } = request.all()
-    const token = await auth.attempt(email, password)
+    const user = await User.findBy({ email });
 
-    return token
+    if (!user) {
+      return this.responseError({
+        response,
+        statusCode: 400,
+        errors: ["Usuário não encontrado"]
+      })
+    }
+
+    const token = await auth.attempt(email, password)
+    return this.responseSuccess({
+      response,
+      statusCode: 200,
+      data: {
+        ...token,
+        user
+      }
+    })
   }
 
   async index () {
@@ -18,7 +39,7 @@ class UserController {
     return await User.findOrFail(params.id)
   }
 
-  async store({ request }) {
+  async store({ response, request }) {
     const data = request.only([
       "username",
       "email",
@@ -31,17 +52,30 @@ class UserController {
     ]);
 
     const user = await User.create(data)
-    return user
+    return this.responseSuccess({
+      response,
+      statusCode: 200,
+      data: {
+        user
+      }
+    })
   }
 
-  async update({ params, request }) {
+  async update({ response, params, request }) {
     const user = await User.findOrFail(params.id)
+
+    if (!user) {
+      return this.responseError({
+        response,
+        statusCode: 400,
+        errors: ["Usuário não encontrado"]
+      })
+    }
 
     const data = request.only([
       "username",
       "email",
       "password",
-      "role",
       "cpf",
       "cnpj",
       "address",
@@ -50,7 +84,13 @@ class UserController {
     await user.merge({ ...data })
     await user.save()
 
-    return user
+    return this.responseSuccess({
+      response,
+      statusCode: 200,
+      data: {
+        user
+      }
+    })
   }
 }
 

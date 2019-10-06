@@ -12,4 +12,4 @@ RUN npm i -g nodemon
 RUN npm i -g @adonisjs/cli
 RUN npm install
 
-CMD ["nodemon", "server.js"]
+CMD ["npm", "run", "dev"]

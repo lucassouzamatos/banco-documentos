@@ -38,6 +38,10 @@ class User extends Model {
   static get hidden () {
     return ['password']
   }
+
+  static get primaryKey () {
+    return 'id'
+  }
 }
 
 module.exports = User
