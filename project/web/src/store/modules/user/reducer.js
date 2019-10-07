@@ -1,5 +1,5 @@
 const INITIAL_STATE = {
-  user: null,
+  profile: null,
 };
 
 export default function user(state = INITIAL_STATE, action) {
@@ -7,7 +7,7 @@ export default function user(state = INITIAL_STATE, action) {
     case '@auth/SIGN_IN_SUCCESS':
       return {
         ...state,
-        user: action.payload.user,
+        profile: action.payload.user,
       };
     default:
       return state;

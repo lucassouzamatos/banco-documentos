@@ -1,22 +1,29 @@
 import React from 'react';
-import { Form } from '@rocketseat/unform';
+import { useSelector } from 'react-redux';
+import { Form, Select } from '@rocketseat/unform';
 
 import { Container } from './styles';
 import { Title } from '~/components/Styled/Title';
 import { Button } from '~/components/Styled/Button';
 import Input from '~/components/Input';
 
+const states = [{ id: 1, title: 'Santa Catarina' }];
+const cities = [{ id: 1, title: 'Tubarão' }];
+
 export default function ProfileEdit() {
+  const profile = useSelector(state => state.user.profile);
+
   function handleSubmit(data) {
     console.tron.log(data);
   }
 
   const initialData = {
-    email: 'admin@gmail.com',
-    social: 'razao',
-    cnpj: '1000.12.21.21',
-    address: 'street 123',
-    city: 'tuba',
+    email: profile.email,
+    username: profile.username,
+    cpf: profile.cpf,
+    cnpj: profile.cnpj,
+    address: profile.address,
+    city_id: profile.city_id,
     state: 'SC',
   };
 
@@ -25,11 +32,21 @@ export default function ProfileEdit() {
       <Title>Dados</Title>
       <Form onSubmit={handleSubmit} initialData={initialData}>
         <Input id="email" type="email" required label="E-mail" />
-        <Input id="social" type="text" required label="Razão Social" />
-        <Input id="cnpj" type="text" required label="CNPJ" />
+        <Input
+          id="username"
+          type="text"
+          required
+          label={profile.role === 'ARTIST' ? 'Nome' : 'Razão Social'}
+        />
+        {profile.role === 'STUDIO' && (
+          <Input id="cnpj" type="text" required label="CNPJ" />
+        )}
+        {profile.role === 'ARTIST' && (
+          <Input id="cpf" type="text" required label="CPF" />
+        )}
         <Input id="address" type="text" required label="Endereço" />
-        <Input id="city" type="text" required label="Cidade" />
-        <Input id="state" type="text" required label="Estado" />
+        <Select name="state" label="Estado" options={states} />
+        <Select name="city_id" label="Cidade" options={cities} />
 
         <Button background="#292C2F" type="submit">
           Salvar

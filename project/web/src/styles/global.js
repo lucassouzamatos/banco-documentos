@@ -47,4 +47,9 @@ export default createGlobalStyle`
   label {
     color: #9E9EA5;
   }
+
+  select {
+    width: 100%;
+    margin: 0 0 8px 0;
+  }
 `;
