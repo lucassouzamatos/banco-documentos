@@ -12,6 +12,22 @@ export function signInSuccess(token, user) {
   };
 }
 
+export function signUpRequest(
+  username,
+  email,
+  cpf,
+  cnpj,
+  password,
+  role,
+  address,
+  city_id
+) {
+  return {
+    type: '@auth/SIGN_UP_REQUEST',
+    payload: { username, email, cpf, cnpj, password, role, address, city_id },
+  };
+}
+
 export function signFailure() {
   return {
     type: '@auth/SIGN_FAILURE',
