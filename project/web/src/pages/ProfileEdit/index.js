@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Form, Select } from '@rocketseat/unform';
 
 import { Container } from './styles';
@@ -7,14 +7,17 @@ import { Title } from '~/components/Styled/Title';
 import { Button } from '~/components/Styled/Button';
 import Input from '~/components/Input';
 
+import { updateProfileRequest } from '~/store/modules/user/actions';
+
 const states = [{ id: 1, title: 'Santa Catarina' }];
 const cities = [{ id: 1, title: 'Tubarão' }];
 
 export default function ProfileEdit() {
+  const dispatch = useDispatch();
   const profile = useSelector(state => state.user.profile);
 
   function handleSubmit(data) {
-    console.tron.log(data);
+    dispatch(updateProfileRequest({ ...data, id: profile.id }));
   }
 
   const initialData = {
@@ -29,7 +32,7 @@ export default function ProfileEdit() {
 
   return (
     <Container>
-      <Title>Dados</Title>
+      <Title>Editar Dados</Title>
       <Form onSubmit={handleSubmit} initialData={initialData}>
         <Input id="email" type="email" required label="E-mail" />
         <Input

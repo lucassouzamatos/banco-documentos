@@ -27,6 +27,29 @@ export function* signIn({ payload }) {
   }
 }
 
+export function* signInGoogle({ payload }) {
+  try {
+    const { email, googleId, name } = payload;
+
+    const response = yield call(api.post, 'auth/google', {
+      email,
+      googleId,
+      name,
+    });
+
+    const { token, user } = response.data.data;
+
+    api.defaults.headers.Authorization = `Bearer ${token}`;
+
+    yield put(signInSuccess(token, user));
+
+    history.push('/profile');
+  } catch (err) {
+    toast.error('Falha na autenticação, verifique suas credenciais.');
+    yield put(signFailure());
+  }
+}
+
 export function* signUp({ payload }) {
   try {
     const {
@@ -69,8 +92,14 @@ export function setToken({ payload }) {
   }
 }
 
+export function signOut() {
+  history.push('/');
+}
+
 export default all([
   takeLatest('persist/REHYDRATE', setToken),
   takeLatest('@auth/SIGN_IN_REQUEST', signIn),
   takeLatest('@auth/SIGN_UP_REQUEST', signUp),
+  takeLatest('@auth/SIGN_IN_GOOGLE_REQUEST', signInGoogle),
+  takeLatest('@auth/SIGN_OUT', signOut),
 ]);
