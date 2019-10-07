@@ -7,26 +7,28 @@ class AuthController extends BaseController {
     super()
   }
 
-  async google({ ally, request }) {
-    try {
-      await ally.driver('google').redirect()
-    } catch(e) {
-      console.log(e)
-    }
-
-  }
-
-  async callback({ auth, ally }) {
-    const userAlly = await ally.driver('google').getUser()
+  async google({ response, auth, request }) {
+    const { email, googleId, name } = request.all()
 
     const user = await User.findOrCreate({
-      email: userAlly.getEmail()
+      email,
+      googleId
     }, {
-      username: userAlly.getName(),
-      email: userAlly.getEmail(),
-      role: 'STUDENT',
+      email,
+      googleId,
+      username: name,
+      role: 'CUSTOMER'
     })
-    return { token: await auth.generate(user) }
+
+    const token = await auth.generate(user);
+    return this.responseSuccess({
+      response,
+      statusCode: 200,
+      data: {
+        ...token,
+        user
+      }
+    })
   }
 }
 

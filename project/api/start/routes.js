@@ -20,7 +20,5 @@ Route.group(() => {
   Route.get('users', 'UserController.index')
   Route.post('users', 'UserController.store')
   Route.put('users/:id', 'UserController.update')
-  Route.post('auth', 'UserController.auth')
-  Route.get('auth/google', 'AuthController.google')
-  Route.get('authenticated/google', 'AuthController.callback')
+  Route.post('auth/google', 'AuthController.google')
 }).prefix('api/v1')
