@@ -5,6 +5,13 @@ export function signInRequest(email, password) {
   };
 }
 
+export function signInGoogleRequest(email, googleId, name) {
+  return {
+    type: '@auth/SIGN_IN_GOOGLE_REQUEST',
+    payload: { email, googleId, name },
+  };
+}
+
 export function signInSuccess(token, user) {
   return {
     type: '@auth/SIGN_IN_SUCCESS',
@@ -31,5 +38,11 @@ export function signUpRequest(
 export function signFailure() {
   return {
     type: '@auth/SIGN_FAILURE',
+  };
+}
+
+export function signOut() {
+  return {
+    type: '@auth/SIGN_OUT',
   };
 }

@@ -1,13 +1,20 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { Title } from '~/components/Styled/Title';
 import { DefinitionList } from '~/components/Styled/DefinitionList';
+import { Button, LinkButton } from '~/components/Styled/Button';
 
+import { signOut } from '~/store/modules/auth/actions';
 import { Container } from './styles';
 
 export default function Profile() {
   const profile = useSelector(state => state.user.profile);
+  const dispatch = useDispatch();
+
+  function handleSignOut() {
+    dispatch(signOut());
+  }
 
   return (
     <Container>
@@ -34,15 +41,29 @@ export default function Profile() {
           </>
         )}
 
-        <dt>Endereço</dt>
-        <dd>{profile.address}</dd>
+        {profile.role !== 'CUSTOMER' && (
+          <>
+            <dt>Endereço</dt>
+            <dd>{profile.address}</dd>
 
-        <dt>Cidade</dt>
-        <dd>{profile.city_id}</dd>
+            <dt>Cidade</dt>
+            <dd>{profile.city_id}</dd>
 
-        <dt>Estado</dt>
-        <dd>lorem ipsum</dd>
+            <dt>Estado</dt>
+            <dd>lorem ipsum</dd>
+          </>
+        )}
       </DefinitionList>
+
+      {profile.role !== 'CUSTOMER' && (
+        <LinkButton to="/profile/edit" background="#D9A327">
+          Editar
+        </LinkButton>
+      )}
+
+      <Button background="#292C2F" onClick={handleSignOut}>
+        Sair
+      </Button>
     </Container>
   );
 }

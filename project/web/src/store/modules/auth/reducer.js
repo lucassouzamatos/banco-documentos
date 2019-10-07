@@ -25,6 +25,12 @@ export default function auth(state = INITIAL_STATE, action) {
         ...state,
         loading: false,
       };
+    case '@auth/SIGN_OUT':
+      return {
+        ...state,
+        signed: false,
+        token: null,
+      };
     default:
       return state;
   }

@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 
 /*
 |--------------------------------------------------------------------------
@@ -14,17 +14,20 @@
 */
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
-const Route = use('Route')
+const Route = use("Route");
 
 Route.group(() => {
-  Route.put('users/:id', 'UserController.update')
-  Route.get('users/:id', 'UserController.show')
-  Route.get('users', 'UserController.index')
-  Route.post('users', 'UserController.store')
-  Route.post('auth', 'UserController.auth')
-  Route.post('auth/google', 'AuthController.google')
+  Route.put("users/:id", "UserController.update");
+  Route.get("users/:id", "UserController.show");
+  Route.get("users", "UserController.index");
+  Route.post("users", "UserController.store");
+  Route.post("auth", "UserController.auth");
+  Route.post("auth/google", "AuthController.google");
 
-  Route.get('studio-artists/:studioId', 'StudioArtistController.index')
-  Route.post('studio-artists', 'StudioArtistController.store')
-  Route.delete('studio-artists/:id', 'StudioArtistController.destroy')
-}).prefix('api/v1')
+  Route.get("studio-artists/:studioId", "StudioArtistController.index");
+  Route.post("studio-artists", "StudioArtistController.store");
+  Route.delete("studio-artists/:id", "StudioArtistController.destroy");
+
+  Route.get("states", "StateController.index");
+  Route.get("cities", "CityController.index");
+}).prefix("api/v1");

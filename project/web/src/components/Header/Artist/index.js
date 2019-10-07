@@ -15,7 +15,7 @@ export default function HeaderArtist() {
       <nav>
         <ul>
           <li>
-            <Link to="/profile">
+            <Link to="/artists">
               <MdHome size={21} /> Home Page
             </Link>
           </li>
