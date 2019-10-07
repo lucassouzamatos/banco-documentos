@@ -1,0 +1,46 @@
+version: '2'
+
+networks:
+  inkin:
+    driver: bridge
+
+services:
+  api:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=dev
+    volumes:
+      - .:/home/app
+      - /home/app/node_modules
+    ports:
+      - "3333:3333"
+    depends_on:
+      - postgres
+    networks:
+      - inkin
+    container_name: api
+
+  postgres:
+    image: postgres:9.6.2-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5444:5432"
+    networks:
+      - inkin
+    container_name: postgres
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "pgadmin@pgadmin.com"
+      PGADMIN_DEFAULT_PASSWORD: "pgadmin"
+    ports:
+      - "16543:80"
+    networks:
+      - inkin
+    container_name: pgadmin

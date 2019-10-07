@@ -34,6 +34,18 @@ class User extends Model {
   tokens () {
     return this.hasMany('App/Models/Token')
   }
+
+  city () {
+    return this.hasOne('App/Models/City', 'city_id', 'id')
+  }
+
+  static get hidden () {
+    return ['password']
+  }
+
+  static get primaryKey () {
+    return 'id'
+  }
 }
 
 module.exports = User
