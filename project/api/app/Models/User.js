@@ -35,6 +35,10 @@ class User extends Model {
     return this.hasMany('App/Models/Token')
   }
 
+  city () {
+    return this.hasOne('App/Models/City', 'city_id', 'id')
+  }
+
   static get hidden () {
     return ['password']
   }

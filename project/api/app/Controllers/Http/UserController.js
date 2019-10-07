@@ -30,13 +30,41 @@ class UserController extends BaseController {
     })
   }
 
-  async index () {
-    const users = User.all()
-    return users
+  async index ({ response }) {
+    const users = await User
+      .query()
+      .with('city')
+      .fetch()
+
+    return this.responseSuccess({
+      response,
+      statusCode: 200,
+      data: {
+        users
+      }
+    })
   }
 
-  async show ({ params }) {
-    return await User.findOrFail(params.id)
+  async show ({ response, auth, params }) {
+    if (params.id === "me") {
+      const user = await auth.getUser()
+
+      return this.responseSuccess({
+        response,
+        statusCode: 200,
+        data: {
+          user: await User.query().with('city').where('id', user.id).first()
+        }
+      })
+    }
+
+    return this.responseSuccess({
+      response,
+      statusCode: 200,
+      data: {
+        user: await User.query().with('city').where('id', params.id).first()
+      }
+    })
   }
 
   async store({ response, request }) {
@@ -56,7 +84,7 @@ class UserController extends BaseController {
       response,
       statusCode: 200,
       data: {
-        user
+        user: await User.query().with('city').where('id', user.id).first()
       }
     })
   }
@@ -88,7 +116,7 @@ class UserController extends BaseController {
       response,
       statusCode: 200,
       data: {
-        user
+        user: await User.query().with('city').where('id', user.id).first()
       }
     })
   }
