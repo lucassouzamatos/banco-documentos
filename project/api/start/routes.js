@@ -17,8 +17,14 @@
 const Route = use('Route')
 
 Route.group(() => {
+  Route.put('users/:id', 'UserController.update')
+  Route.get('users/:id', 'UserController.show')
   Route.get('users', 'UserController.index')
   Route.post('users', 'UserController.store')
-  Route.put('users/:id', 'UserController.update')
+  Route.post('auth', 'UserController.auth')
   Route.post('auth/google', 'AuthController.google')
+
+  Route.get('studio-artists/:studioId', 'StudioArtistController.index')
+  Route.post('studio-artists', 'StudioArtistController.store')
+  Route.delete('studio-artists/:id', 'StudioArtistController.destroy')
 }).prefix('api/v1')

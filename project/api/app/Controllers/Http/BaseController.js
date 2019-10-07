@@ -19,8 +19,8 @@ class BaseController {
     return this.responseSuccess({ statusCode, data })
   }
 
-  async responseDestroyed() {
-    return response.status(204)
+  async responseDestroyed({ response }) {
+    return response.status(204).send()
   }
 }
 
