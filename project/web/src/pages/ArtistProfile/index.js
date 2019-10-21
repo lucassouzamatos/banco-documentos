@@ -10,6 +10,7 @@ import api from '~/services/api';
 export default function ArtistProfile() {
   const { id } = useParams();
   const [artist, setArtist] = useState(null);
+  const [arts, setArts] = useState([]);
 
   useEffect(() => {
     function getArtist(artistId) {
@@ -18,7 +19,15 @@ export default function ArtistProfile() {
         setArtist(response.data.data.user);
       }
 
+      async function getArts() {
+        const response = await api.get(
+          `arts?type=ARTIST_ART&user_id=${artistId}`
+        );
+        setArts(response.data.data.arts);
+      }
+
       getUser();
+      getArts();
     }
 
     getArtist(id);
@@ -27,42 +36,41 @@ export default function ArtistProfile() {
   return (
     <Container>
       <ProfileContainer>
-        <LinkButton to="/arts/new" background="#292C2F">
-          Adicionar Tatuagem
-        </LinkButton>
-
         {artist && (
-          <DefinitionList>
-            <dt>Email</dt>
-            <dd>{artist.email}</dd>
+          <>
+            <LinkButton to={`/arts/new/${artist.id}`} background="#292C2F">
+              Adicionar Tatuagem
+            </LinkButton>
 
-            <dt>Nome</dt>
-            <dd>{artist.username}</dd>
+            <DefinitionList>
+              <dt>Email</dt>
+              <dd>{artist.email}</dd>
 
-            <dt>Cidade</dt>
-            <dd>{artist.city.name}</dd>
+              <dt>Nome</dt>
+              <dd>{artist.username}</dd>
 
-            <dt>Estado</dt>
-            <dd>{artist.city.name}</dd>
+              <dt>Cidade</dt>
+              <dd>{artist.city.name}</dd>
 
-            <dt>Estilo</dt>
-            <dd>black work</dd>
-          </DefinitionList>
+              <dt>Estado</dt>
+              <dd>{artist.city.name}</dd>
+
+              <dt>Estilo</dt>
+              <dd>black work</dd>
+            </DefinitionList>
+          </>
         )}
       </ProfileContainer>
 
       <ArtsContainer>
-        {[0, 1, 2, 3].map(item => (
-          <ArtContainer key={item}>
-            <img
-              src="https://www.tattooja.com.br/img/blog/tatuagem-nos-dedos-saiba-tudo-que-precisa-ideias-inspiradoras-para-tattoo-topo-1720742430.jpg"
-              alt="Tattoo"
-            />
+        {arts.map(art => (
+          <ArtContainer key={art.id}>
+            <img src={`http://localhost:3333/${art.path}`} alt={art.title} />
             <div>
-              <h3>Lorem ipsum</h3>
+              <h3>{art.title}</h3>
               <ul>
                 <li>15x20cm</li>
-                <li>R$150,00</li>
+                <li>{art.price}</li>
               </ul>
             </div>
           </ArtContainer>

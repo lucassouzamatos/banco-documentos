@@ -21,6 +21,7 @@ export default function Routes() {
       <Route path="/profile/edit" component={ProfileEdit} isPrivate />
       <Route path="/profile" component={Profile} isPrivate />
       <Route path="/artists" component={ArtistList} isPrivate />
+      <Route path="/arts/new/:id" component={ArtRegister} isPrivate />
       <Route path="/arts/new" component={ArtRegister} isPrivate />
       <Route path="/arts" component={ArtList} isPrivate />
       <Route path="/artist/:id" component={ArtistProfile} isPrivate />
