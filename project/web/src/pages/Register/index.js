@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Form, Choice, Select } from '@rocketseat/unform';
 
@@ -11,8 +11,7 @@ import Input from '~/components/Input';
 
 import { signUpRequest } from '~/store/modules/auth/actions';
 
-const states = [{ id: 1, title: 'Santa Catarina' }];
-const cities = [{ id: 1, title: 'Tubarão' }];
+import api from '~/services/api';
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -20,6 +19,22 @@ export default function Login() {
     role: 'ARTIST',
   };
   const [role, setRole] = useState('ARTIST');
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
+
+  useEffect(() => {
+    async function loadArtists() {
+      const response = await api.get(`states`);
+
+      setStates(
+        response.data.data.states.map(state => ({
+          title: state.name,
+          id: state.id,
+        }))
+      );
+    }
+    loadArtists();
+  }, []);
 
   function handleSubmit({
     username,
@@ -43,6 +58,20 @@ export default function Login() {
         city_id
       )
     );
+  }
+
+  function handleOnChangeState(state) {
+    async function loadCities() {
+      const response = await api.get(`cities?state_id=${state}`);
+
+      setCities(
+        response.data.data.cities.map(city => ({
+          title: city.name,
+          id: city.id,
+        }))
+      );
+    }
+    loadCities();
   }
 
   return (
@@ -79,7 +108,12 @@ export default function Login() {
           <Input id="email" type="email" required label="E-mail" />
           <Input id="password" type="password" required label="Senha" />
           <Input id="address" type="text" required label="Endereço" />
-          <Select name="state" label="Estado" options={states} />
+          <Select
+            name="state"
+            label="Estado"
+            options={states}
+            onChange={e => handleOnChangeState(e.target.value)}
+          />
           <Select name="city_id" label="Cidade" options={cities} />
 
           <Button background="#292C2F" type="submit">

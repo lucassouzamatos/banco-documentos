@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import background from '../../assets/background.png';
 
 export const Container = styled.div`
-  height: 100vh;
+  min-height: 100vh;
   background: url(${background});
   background-size: cover;
   background-repeat: no-repeat;
