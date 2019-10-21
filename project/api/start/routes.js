@@ -30,4 +30,9 @@ Route.group(() => {
 
   Route.get("states", "StateController.index");
   Route.get("cities", "CityController.index");
+
+  Route.put("arts/:id", "ArtController.update");
+  Route.get("arts/:id", "ArtController.show");
+  Route.get("arts", "ArtController.index");
+  Route.post("arts", "ArtController.store");
 }).prefix("api/v1");
