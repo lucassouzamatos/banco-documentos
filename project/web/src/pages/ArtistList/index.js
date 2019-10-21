@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 
 import { useSelector } from 'react-redux';
 import { MdBookmark, MdPlace } from 'react-icons/md';
+import { toast } from 'react-toastify';
 import api from '~/services/api';
 import { Container, Artist, ContainerFlex, HeaderContainer } from './styles';
 import { Title } from '~/components/Styled/Title';
@@ -18,13 +19,28 @@ export default function ArtistList() {
 
   function addArtist(user) {
     async function linkUser() {
-      await api.post(`studio-artists`, {
-        studio_id: profile.id,
-        artist_id: user.id,
-      });
-    }
+      try {
+        await api.post(`studio-artists`, {
+          studio_id: profile.id,
+          artist_id: user.id,
+        });
 
-    setArtists([...artists, { artist: user }]);
+        setArtists([...artists, { artist: user }]);
+        toast.success('Artista vinculado com sucesso!');
+      } catch (error) {
+        if (error.response.data.errors) {
+          const errorsMessage = error.response.data.errors.reduce(
+            (accumulator, errorMessage) => accumulator + errorMessage,
+            ''
+          );
+
+          toast.error(errorsMessage);
+          return;
+        }
+
+        toast.error('Erro ao vincular artista.');
+      }
+    }
 
     linkUser();
   }
@@ -67,7 +83,7 @@ export default function ArtistList() {
       >
         <ContainerFlex>
           {users.map(user => (
-            <Artist key={user.id}>
+            <Artist to={`/artist/${user.id}`} key={user.id}>
               <img
                 src="https://protagonistas.co/wp-content/uploads/2019/03/negocio-de-tatuagem.jpg"
                 alt=""
@@ -105,7 +121,7 @@ export default function ArtistList() {
 
       <ContainerFlex>
         {artists.map(artist => (
-          <Artist key={artist.artist.id}>
+          <Artist to={`/artist/${artist.artist.id}`} key={artist.id}>
             <img
               src="https://protagonistas.co/wp-content/uploads/2019/03/negocio-de-tatuagem.jpg"
               alt=""

@@ -8,6 +8,11 @@ import Profile from '../pages/Profile';
 import ProfileEdit from '../pages/ProfileEdit';
 import Register from '../pages/Register';
 import ArtistList from '../pages/ArtistList';
+import ArtList from '../pages/ArtList';
+import ArtRegister from '../pages/ArtRegister';
+import ArtistProfile from '../pages/ArtistProfile';
+import ReviewRegister from '../pages/ReviewRegister';
+import ReviewList from '../pages/ReviewList';
 
 export default function Routes() {
   return (
@@ -18,6 +23,12 @@ export default function Routes() {
       <Route path="/profile/edit" component={ProfileEdit} isPrivate />
       <Route path="/profile" component={Profile} isPrivate />
       <Route path="/artists" component={ArtistList} isPrivate />
+      <Route path="/arts/new/:id" component={ArtRegister} isPrivate />
+      <Route path="/arts/new" component={ArtRegister} isPrivate />
+      <Route path="/arts" component={ArtList} isPrivate />
+      <Route path="/artist/:id" component={ArtistProfile} isPrivate />
+      <Route path="/reviews/:id" component={ReviewRegister} isPrivate />
+      <Route path="/reviews" component={ReviewList} isPrivate />
     </Switch>
   );
 }
