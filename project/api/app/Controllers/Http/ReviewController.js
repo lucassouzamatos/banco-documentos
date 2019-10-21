@@ -4,42 +4,43 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
-const Art = use("App/Models/Art");
-const BaseController = use("App/Controllers/Http/BaseController");
+const Review = use("App/Models/Review");
 const FileUpload = use("FileUpload")
+const BaseController = use("App/Controllers/Http/BaseController");
 
 /**
- * Resourceful controller for interacting with arts
+ * Resourceful controller for interacting with reviews
  */
-class ArtController extends BaseController {
+class ReviewController extends BaseController {
   /**
-   * Show a list of all arts.
-   * GET arts
+   * Show a list of all reviews.
+   * GET reviews
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response }) {
+  async index ({ request, response, view }) {
     const { user_id } = request.get();
-    const arts = Art.query()
+
+    const reviews = Review.query()
 
     if (user_id)
-      arts.where("user_id", user_id)
+      reviews.where("user_id", user_id)
 
     return this.responseSuccess({
       response,
       statusCode: 200,
       data: {
-        arts: await arts.fetch()
+        reviews: await reviews.fetch()
       }
     });
   }
 
   /**
-   * Create/save a new art.
-   * POST arts
+   * Create/save a new review.
+   * POST reviews
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -54,9 +55,6 @@ class ArtController extends BaseController {
     const data = request.only([
       "title",
       "description",
-      "path",
-      "price",
-      "dimensions"
     ])
 
     try {
@@ -70,7 +68,7 @@ class ArtController extends BaseController {
     }
 
     const user = await auth.getUser();
-    const art = await Art.create({
+    const review = await Review.create({
       user_id: user.id,
       ...data,
       path: '/uploads/' + image.fileName
@@ -79,13 +77,13 @@ class ArtController extends BaseController {
     return this.responseSuccess({
       response,
       statusCode: 200,
-      data: { art }
+      data: { review }
     });
   }
 
   /**
-   * Display a single art.
-   * GET arts/:id
+   * Display a single review.
+   * GET reviews/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -98,29 +96,34 @@ class ArtController extends BaseController {
       return this.responseError({
         response,
         statusCode: 400,
-        errors: ["Arte não especificada"]
+        errors: ["Avaliação não especificada"]
       });
     }
 
-    const art = await Art.findBy({ id });
-    if (!art) {
+    const review = await Review
+      .query()
+      .where({ id })
+      .with("user")
+      .first();
+
+    if (!review) {
       return this.responseError({
         response,
         statusCode: 400,
-        errors: ["Arte não encontrada"]
+        errors: ["Avaliação não encontrada"]
       });
     }
 
     return this.responseSuccess({
       response,
       statusCode: 200,
-      data: art
+      data: review
     });
   }
 
   /**
-   * Update art details.
-   * PUT or PATCH arts/:id
+   * Update review details.
+   * PUT or PATCH reviews/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -130,8 +133,8 @@ class ArtController extends BaseController {
   }
 
   /**
-   * Delete a art with id.
-   * DELETE arts/:id
+   * Delete a review with id.
+   * DELETE reviews/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -141,4 +144,4 @@ class ArtController extends BaseController {
   }
 }
 
-module.exports = ArtController
+module.exports = ReviewController
