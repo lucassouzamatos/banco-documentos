@@ -5,6 +5,7 @@ export const Container = styled.div`
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
+  width: 100%;
 `;
 
 export const ProfileContainer = styled.div`
