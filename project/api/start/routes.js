@@ -35,4 +35,14 @@ Route.group(() => {
   Route.get("arts/:id", "ArtController.show");
   Route.get("arts", "ArtController.index");
   Route.post("arts", "ArtController.store");
+
+  Route.put("reviews/:id", "ReviewController.update");
+  Route.get("reviews/:id", "ReviewController.show");
+  Route.get("reviews", "ReviewController.index");
+  Route.post("reviews", "ReviewController.store");
+
+  Route.put("likes/:id", "ReviewLikeController.update");
+  Route.get("likes/:id", "ReviewLikeController.show");
+  Route.get("likes", "ReviewLikeController.index");
+  Route.post("likes", "ReviewLikeController.store");
 }).prefix("api/v1");
