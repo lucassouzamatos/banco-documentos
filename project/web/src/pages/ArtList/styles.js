@@ -1,16 +1,14 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 export const Container = styled.div`
   padding: 16px;
   width: 100%;
 `;
 
-export const Artist = styled(Link)`
+export const Artist = styled.div`
   padding: 16px;
   max-width: 230px;
   text-align: center;
-  color: #414141;
 
   img {
     width: 160px;
@@ -36,12 +34,12 @@ export const HeaderContainer = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  button {
+  a {
     width: 200px;
   }
 `;
 
-export const test = styled.div`
+export const FlexContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
 `;

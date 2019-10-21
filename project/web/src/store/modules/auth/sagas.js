@@ -74,6 +74,7 @@ export function* signUp({ payload }) {
       city_id,
     });
 
+    toast.success(`Cadastrado com sucesso!`);
     history.push('/login');
   } catch (err) {
     toast.error('Falha no cadastro. Verifique seus dados');

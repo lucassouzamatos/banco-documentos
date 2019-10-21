@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   background: #292c2f;
-  height: 100vh;
+  min-height: 100vh;
   width: 230px;
 
   nav {
