@@ -1,24 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Form } from '@rocketseat/unform';
 
 import { toast } from 'react-toastify';
 import api from '~/services/api';
-import {
-  Container,
-  RegisterContainer,
-  FlexContainer,
-  Subtitle,
-} from './styles';
+import { Container, RegisterContainer, FlexContainer } from './styles';
 import { Title } from '~/components/Styled/Title';
 import Input from '~/components/Input';
 
 import { Button } from '~/components/Styled/Button';
 
-export default function ArtRegister() {
+export default function ReviewRegister() {
   const { id } = useParams();
 
-  const [artist, setArtist] = useState(null);
   const [image, setImage] = useState(null);
 
   function handleSubmit(data) {
@@ -30,10 +24,10 @@ export default function ArtRegister() {
         });
 
         formData.append('image', image);
-        formData.append('type', 'ARTIST_ART');
-        await api.post(`arts`, formData);
+        formData.append('type', 'REVIEW');
+        // await api.post(`arts`, formData);
 
-        toast.success('Arte cadastrada com sucesso!');
+        toast.success('Avaliação cadastrada com sucesso!');
       } catch (error) {
         if (error.response.data.errors) {
           const errorsMessage = error.response.data.errors.reduce(
@@ -45,7 +39,7 @@ export default function ArtRegister() {
           return;
         }
 
-        toast.error('Erro ao cadastrar arte.');
+        toast.error('Erro ao cadastrar avaliação.');
       }
     }
 
@@ -57,28 +51,10 @@ export default function ArtRegister() {
     setImage(file);
   }
 
-  useEffect(() => {
-    function getArtist(artistId) {
-      async function getUser() {
-        const response = await api.get(`users/${artistId}`);
-        setArtist(response.data.data.user);
-      }
-
-      getUser();
-    }
-
-    if (id) {
-      getArtist(id);
-    }
-  }, []);
-
   return (
     <Container>
       <div>
-        <Title>Adicionar Arte</Title>
-        {id && artist && (
-          <Subtitle>Adicionando arte para {artist.username}</Subtitle>
-        )}
+        <Title>Adicionar Avaliação</Title>
       </div>
 
       <RegisterContainer>
@@ -88,8 +64,6 @@ export default function ArtRegister() {
             alt="Tattoo"
           />
 
-          {/* <FileInput name="image" /> */}
-
           <input type="file" onChange={onChangeFile} />
           <Button background="#D9A327" type="button">
             Carregar
@@ -97,16 +71,7 @@ export default function ArtRegister() {
 
           <FlexContainer>
             <Input id="title" type="text" required label="Título" />
-            <Input id="size" type="text" required label="Dimensões" />
-          </FlexContainer>
-
-          <FlexContainer>
-            <Input id="description" type="text" required label="Descrição" />
-            <Input id="price" type="text" required label="Preço" />
-
-            {/* <div>
-              <Select name="style" label="Estilo" options={styles} />
-            </div> */}
+            <Input id="comment" type="text" required label="Comentário" />
           </FlexContainer>
 
           <Button background="#292C2F" type="submit">

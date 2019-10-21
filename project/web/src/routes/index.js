@@ -11,6 +11,8 @@ import ArtistList from '../pages/ArtistList';
 import ArtList from '../pages/ArtList';
 import ArtRegister from '../pages/ArtRegister';
 import ArtistProfile from '../pages/ArtistProfile';
+import ReviewRegister from '../pages/ReviewRegister';
+import ReviewList from '../pages/ReviewList';
 
 export default function Routes() {
   return (
@@ -25,6 +27,8 @@ export default function Routes() {
       <Route path="/arts/new" component={ArtRegister} isPrivate />
       <Route path="/arts" component={ArtList} isPrivate />
       <Route path="/artist/:id" component={ArtistProfile} isPrivate />
+      <Route path="/reviews/:id" component={ReviewRegister} isPrivate />
+      <Route path="/reviews" component={ReviewList} isPrivate />
     </Switch>
   );
 }
