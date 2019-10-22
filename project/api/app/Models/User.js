@@ -39,6 +39,14 @@ class User extends Model {
     return this.hasOne('App/Models/City', 'city_id', 'id')
   }
 
+  isStudio () {
+    return this.role == 'STUDIO'
+  }
+
+  isArtist () {
+    return this.role == 'ARTIST'
+  }
+
   static get hidden () {
     return ['password']
   }

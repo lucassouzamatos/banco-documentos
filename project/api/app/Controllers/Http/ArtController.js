@@ -5,8 +5,10 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 const Art = use("App/Models/Art");
+const User = use("App/Models/User");
 const BaseController = use("App/Controllers/Http/BaseController");
 const FileUpload = use("FileUpload")
+const UserBusiness = use("UserBusiness")
 
 /**
  * Resourceful controller for interacting with arts
@@ -56,7 +58,8 @@ class ArtController extends BaseController {
       "description",
       "path",
       "price",
-      "dimensions"
+      "dimensions",
+      "user_id"
     ])
 
     try {
@@ -69,10 +72,33 @@ class ArtController extends BaseController {
       });
     }
 
-    const user = await auth.getUser();
+    let currentUser = await auth.getUser()
+    if (data.user_id) {
+      const user = await User.find(data.user_id)
+      if (!user) {
+        return this.responseError({
+          response,
+          statusCode: 400,
+          errors: ["Usuário não encontrado"]
+        });
+      }
+
+      if (!user.isArtist()) {
+        return this.responseError({
+          response,
+          statusCode: 400,
+          errors: ["Arte só pode ser cadastrada para artistas"]
+        });
+      }
+
+      if (await UserBusiness.belongsToStudio(user, currentUser)) {
+        currentUser = user
+      }
+    }
+
     const art = await Art.create({
-      user_id: user.id,
       ...data,
+      user_id: currentUser.id,
       path: '/uploads/' + image.fileName
     })
 

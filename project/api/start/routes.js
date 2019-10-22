@@ -45,4 +45,7 @@ Route.group(() => {
   Route.get("likes/:id", "ReviewLikeController.show");
   Route.get("likes", "ReviewLikeController.index");
   Route.post("likes", "ReviewLikeController.store");
+
+  Route.get("styles", "StyleController.index");
+
 }).prefix("api/v1");

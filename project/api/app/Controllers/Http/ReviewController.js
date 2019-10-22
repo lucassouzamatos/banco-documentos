@@ -24,10 +24,12 @@ class ReviewController extends BaseController {
   async index ({ request, response, view }) {
     const { user_id } = request.get();
 
-    const reviews = Review.query()
+    let reviews = Review.query()
 
     if (user_id)
       reviews.where("user_id", user_id)
+
+    review.withCount("likes")
 
     return this.responseSuccess({
       response,
