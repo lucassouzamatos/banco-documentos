@@ -7,9 +7,9 @@ const StyleSeeder = require('./StyleSeeder')
 
 class DatabaseSeeder {
   async run() {
-    /* await StateSeeder.run()
+    await StateSeeder.run()
     await CitySeeder.run()
-    await UserSeeder.run() */
+    await UserSeeder.run()
     await StyleSeeder.run()
   }
 }
