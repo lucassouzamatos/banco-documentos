@@ -48,4 +48,6 @@ Route.group(() => {
 
   Route.get("styles", "StyleController.index");
 
+  Route.get("schedules", "ScheduleController.index");
+  Route.post("schedules", "ScheduleController.store");
 }).prefix("api/v1");

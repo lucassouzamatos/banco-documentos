@@ -39,6 +39,10 @@ class User extends Model {
     return this.hasOne('App/Models/City', 'city_id', 'id')
   }
 
+  studioArtist () {
+    return this.belongsTo('App/Models/StudioArtist', 'id', 'artist_id')
+  }
+
   isStudio () {
     return this.role == 'STUDIO'
   }
