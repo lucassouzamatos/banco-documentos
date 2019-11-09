@@ -21,9 +21,13 @@ export const RegisterContainer = styled.div`
     margin: 16px auto;
   }
 
-  button {
+  label {
     width: 200px;
     margin: auto;
+  }
+
+  input[type='file'] {
+    display: none;
   }
 `;
 

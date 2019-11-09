@@ -8,12 +8,13 @@ import { Container, RegisterContainer, FlexContainer } from './styles';
 import { Title } from '~/components/Styled/Title';
 import Input from '~/components/Input';
 
-import { Button } from '~/components/Styled/Button';
+import { Button, ButtonLabel } from '~/components/Styled/Button';
 
 export default function ReviewRegister() {
   const { id } = useParams();
 
   const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   function handleSubmit(data) {
     async function createArt() {
@@ -48,7 +49,11 @@ export default function ReviewRegister() {
 
   function onChangeFile(e) {
     const [file] = e.target.files;
-    setImage(file);
+
+    if (file) {
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
   }
 
   return (
@@ -59,15 +64,12 @@ export default function ReviewRegister() {
 
       <RegisterContainer>
         <Form onSubmit={handleSubmit}>
-          <img
-            src="https://www.tattooja.com.br/img/blog/tatuagem-nos-dedos-saiba-tudo-que-precisa-ideias-inspiradoras-para-tattoo-topo-1720742430.jpg"
-            alt="Tattoo"
-          />
+          {imagePreview && <img src={imagePreview} alt="Tattoo" />}
 
-          <input type="file" onChange={onChangeFile} />
-          <Button background="#D9A327" type="button">
+          <input id="image" type="file" onChange={onChangeFile} />
+          <ButtonLabel background="#D9A327" htmlFor="image">
             Carregar
-          </Button>
+          </ButtonLabel>
 
           <FlexContainer>
             <Input id="title" type="text" required label="Título" />
