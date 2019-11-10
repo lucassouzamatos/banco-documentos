@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const DefinitionList = styled.h2`
+const DefinitionList = styled.h2`
   dt {
     font-size: 12px;
     color: rgba(0, 0, 0, 0.3);
@@ -14,3 +14,5 @@ export const DefinitionList = styled.h2`
     margin-bottom: 16px;
   }
 `;
+
+export default DefinitionList;

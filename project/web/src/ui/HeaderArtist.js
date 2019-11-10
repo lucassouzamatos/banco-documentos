@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 import {
   MdHome,
   MdPerson,
@@ -10,9 +11,7 @@ import {
   MdExplore,
 } from 'react-icons/md';
 
-import { Container } from './styles';
-
-export default function HeaderArtist() {
+const HeaderArtist = () => {
   const role = useSelector(state => state.user.profile.role);
 
   return (
@@ -41,7 +40,7 @@ export default function HeaderArtist() {
 
           {role === 'ARTIST' && (
             <li>
-              <Link to="/profile">
+              <Link to="/schedule">
                 <MdInsertInvitation size={21} />
                 Agenda
               </Link>
@@ -58,7 +57,7 @@ export default function HeaderArtist() {
           )}
 
           <li>
-            <Link to="/profile">
+            <Link to="/notifications">
               <MdNotifications size={21} />
               Notificações
             </Link>
@@ -67,4 +66,35 @@ export default function HeaderArtist() {
       </nav>
     </Container>
   );
-}
+};
+
+export const Container = styled.div`
+  background: #292c2f;
+  min-height: 100vh;
+  min-width: 230px;
+
+  nav {
+    padding-top: 16px;
+  }
+
+  a {
+    font-family: Tahoma, sans-serif;
+    color: #95989a;
+    display: block;
+    padding: 12px;
+    transition: all 0.25s;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      background: #d9a327;
+      color: #fff;
+    }
+
+    svg {
+      margin-right: 8px;
+    }
+  }
+`;
+
+export default HeaderArtist;
