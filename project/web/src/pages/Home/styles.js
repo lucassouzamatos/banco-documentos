@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import background from '../../assets/background.png';
 
 export const Container = styled.div`
@@ -16,29 +15,11 @@ export const ButtonContainer = styled.div`
   left: 0;
   width: 100%;
   display: flex;
-`;
 
-export const LinkButton = styled(Link)`
-  display: block;
-  flex: 1;
-  text-align: center;
-  color: #fff;
-  text-transform: uppercase;
-  background: ${props => props.background};
-  font-size: 22px;
-  padding: 24px 0;
-  font-weight: bold;
-`;
-
-export const Button = styled.button`
-  display: block;
-  flex: 1;
-  text-align: center;
-  color: #fff;
-  text-transform: uppercase;
-  background: ${props => props.background};
-  font-size: 22px;
-  padding: 24px 0;
-  font-weight: bold;
-  border: none;
+  a,
+  button {
+    font-size: 22px;
+    border-radius: 0;
+    padding: 24px 0;
+  }
 `;
