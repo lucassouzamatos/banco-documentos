@@ -22,6 +22,10 @@ class CitySeeder {
       }
     ])
   }
+
+  async run () {
+    await CitySeeder.run()
+  }
 }
 
 module.exports = CitySeeder
