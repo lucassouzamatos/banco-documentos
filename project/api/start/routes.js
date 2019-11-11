@@ -45,4 +45,26 @@ Route.group(() => {
   Route.get("likes/:id", "ReviewLikeController.show");
   Route.get("likes", "ReviewLikeController.index");
   Route.post("likes", "ReviewLikeController.store");
+
+  Route.get("styles", "StyleController.index");
+
+  Route.get("schedules", "ScheduleController.index");
+  Route.post("schedules", "ScheduleController.store");
+  Route.get("schedules/:id", "ScheduleController.show");
+
+  Route.delete("interests/:id", "InterestController.destroy");
+  Route.get("interests", "InterestController.index");
+  Route.post("interests", "InterestController.store");
+
+  Route.delete("artist-styles/:id", "ArtistStyleController.destroy");
+  Route.get("artist-styles", "ArtistStyleController.index");
+  Route.post("artist-styles", "ArtistStyleController.store");
+
+  Route.delete("schedule-dates/:id", "ScheduleDateController.destroy");
+  Route.get("schedule-dates", "ScheduleDateController.index");
+  Route.post("schedule-dates", "ScheduleDateController.store");
+
+  Route.delete("scheduleds/:id", "ScheduledController.destroy");
+  Route.get("scheduleds", "ScheduledController.index");
+  Route.post("scheduleds", "ScheduledController.store");
 }).prefix("api/v1");

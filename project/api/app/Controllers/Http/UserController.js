@@ -1,6 +1,7 @@
 "use strict";
 const User = use("App/Models/User");
 const BaseController = use("App/Controllers/Http/BaseController");
+const FileUpload = use("FileUpload")
 
 class UserController extends BaseController {
   constructor() {
@@ -31,20 +32,26 @@ class UserController extends BaseController {
   }
 
   async index({ response, request }) {
-    const { role } = request.get();
+    const { role, username } = request.get();
 
-    const users = await User.query()
-      .where("role", role || null)
+    const users = User.query()
       .with("city", builder => {
         builder.with("state");
       })
-      .fetch();
+
+    if (role) {
+      users.where("role", role)
+    }
+
+    if (username) {
+      users.where("username", "ILIKE", `%${username}%`)
+    }
 
     return this.responseSuccess({
       response,
       statusCode: 200,
       data: {
-        users
+        users: await users.fetch()
       }
     });
   }
@@ -78,7 +85,7 @@ class UserController extends BaseController {
   }
 
   async store({ response, request }) {
-    const data = request.only([
+    let data = request.only([
       "username",
       "email",
       "password",
@@ -88,6 +95,24 @@ class UserController extends BaseController {
       "address",
       "city_id"
     ]);
+
+    let image = request.file('image', {
+      types: ['image'],
+      size: '10mb'
+    })
+
+    if (image) {
+      try {
+        image = await FileUpload.upload(image)
+        data = { ...data, avatar: '/uploads/' + image.fileName }
+      } catch(e) {
+        return this.responseError({
+          response,
+          statusCode: 400,
+          errors: e.message
+        });
+      }
+    }
 
     const user = await User.create(data);
     return this.responseSuccess({
@@ -113,7 +138,7 @@ class UserController extends BaseController {
       });
     }
 
-    const data = request.only([
+    let data = request.only([
       "username",
       "email",
       "password",
@@ -122,6 +147,25 @@ class UserController extends BaseController {
       "address",
       "city_id"
     ]);
+
+    let image = request.file('image', {
+      types: ['image'],
+      size: '10mb'
+    })
+
+    if (image) {
+      try {
+        image = await FileUpload.upload(image)
+        data = { ...data, avatar: '/uploads/' + image.fileName }
+      } catch(e) {
+        return this.responseError({
+          response,
+          statusCode: 400,
+          errors: e.message
+        });
+      }
+    }
+
     await user.merge({ ...data });
     await user.save();
 

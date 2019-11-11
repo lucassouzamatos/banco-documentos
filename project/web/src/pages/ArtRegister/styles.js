@@ -1,14 +1,5 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  padding: 16px;
-  width: 100%;
-
-  h2 {
-    padding-bottom: 0;
-  }
-`;
-
 export const RegisterContainer = styled.div`
   width: 600px;
   margin: auto;
@@ -21,19 +12,13 @@ export const RegisterContainer = styled.div`
     margin: 16px auto;
   }
 
-  button {
+  label {
     width: 200px;
     margin: auto;
   }
-`;
 
-export const HeaderContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  a {
-    width: 200px;
+  input[type='file'] {
+    display: none;
   }
 `;
 

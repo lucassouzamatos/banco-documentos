@@ -30,6 +30,10 @@ class UserSeeder {
       }
     ])
   }
+
+  async run () {
+    await UserSeeder.run()
+  }
 }
 
 module.exports = UserSeeder

@@ -23,6 +23,10 @@ class StateSeeder {
       }
     ])
   }
+
+  async run () {
+    await StateSeeder.run()
+  }
 }
 
 module.exports = StateSeeder
