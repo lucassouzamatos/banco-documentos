@@ -19,6 +19,10 @@ class Schedule extends Model {
     })
   }
 
+  scheduleDates () {
+    return this.hasMany('App/Models/ScheduleDate', 'id', 'schedule_id')
+  }
+
   user () {
     return this.hasOne('App/Models/User', 'user_id', 'id')
   }

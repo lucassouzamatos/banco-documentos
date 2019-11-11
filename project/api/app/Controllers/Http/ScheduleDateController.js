@@ -4,34 +4,13 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
+const ScheduleDate = use("App/Models/ScheduleDate");
+const BaseController = use("App/Controllers/Http/BaseController");
+
 /**
  * Resourceful controller for interacting with scheduledates
  */
-class ScheduleDateController {
-  /**
-   * Show a list of all scheduledates.
-   * GET scheduledates
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
-  }
-
-  /**
-   * Render a form to be used for creating a new scheduledate.
-   * GET scheduledates/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
-  }
-
+class ScheduleDateController extends BaseController {
   /**
    * Create/save a new scheduledate.
    * POST scheduledates
@@ -41,6 +20,30 @@ class ScheduleDateController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
+    const data = request.only([
+      "date",
+      "schedule_id"
+    ])
+
+    const scheduleDateExists = await ScheduleDate.query()
+      .where("schedule_id", data.schedule_id)
+      .where("date", data.date)
+      .first()
+
+    if (scheduleDateExists) {
+      return this.responseError({
+        response,
+        statusCode: 400,
+        errors: ["Essa data já foi definida na agenda"]
+      });
+    }
+
+    const scheduleDate = await ScheduleDate.create(data)
+    return this.responseSuccess({
+      response,
+      statusCode: 200,
+      data: { scheduleDate }
+    });
   }
 
   /**

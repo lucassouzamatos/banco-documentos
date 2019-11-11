@@ -42,7 +42,7 @@ class ScheduleController extends BaseController {
       response,
       statusCode: 200,
       data: {
-        users: await schedules.with("user").fetch()
+        schedules: await schedules.with("user").fetch()
       }
     });
   }
@@ -87,9 +87,10 @@ class ScheduleController extends BaseController {
     }
   }
 
+
   /**
    * Display a single schedule.
-   * GET schedules/:id
+   * GET reviews/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -97,29 +98,39 @@ class ScheduleController extends BaseController {
    * @param {View} ctx.view
    */
   async show ({ params, request, response, view }) {
+    const { id } = params;
+    if (!id) {
+      return this.responseError({
+        response,
+        statusCode: 400,
+        errors: ["Agenda não especificada"]
+      });
+    }
+
+    const schedule = await Schedule
+      .query()
+      .where({ id })
+      .with("user")
+      .with("scheduleDates", builder => {
+        builder.withCount("scheduled as scheduled")
+      })
+      .first();
+
+    if (!schedule) {
+      return this.responseError({
+        response,
+        statusCode: 400,
+        errors: ["Agenda não encontrada"]
+      });
+    }
+
+    return this.responseSuccess({
+      response,
+      statusCode: 200,
+      data: schedule
+    });
   }
 
-  /**
-   * Update schedule details.
-   * PUT or PATCH schedules/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
-   * Delete a schedule with id.
-   * DELETE schedules/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
-  }
 }
 
 module.exports = ScheduleController

@@ -30,6 +30,10 @@ class StyleSeeder {
       }
     ])
   }
+
+  async run () {
+    await StyleSeeder.run()
+  }
 }
 
 module.exports = StyleSeeder
