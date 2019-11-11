@@ -112,7 +112,7 @@ class ScheduleController extends BaseController {
       .where({ id })
       .with("user")
       .with("scheduleDates", builder => {
-        builder.withCount("scheduled as scheduled")
+        builder.with("scheduled")
       })
       .first();
 
