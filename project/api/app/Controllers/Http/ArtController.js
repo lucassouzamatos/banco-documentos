@@ -66,7 +66,8 @@ class ArtController extends BaseController {
       "price",
       "dimensions",
       "user_id",
-      "style_id"
+      "style_id",
+      "duration"
     ])
 
     try {
