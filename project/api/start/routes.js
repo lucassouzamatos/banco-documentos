@@ -51,6 +51,7 @@ Route.group(() => {
   Route.get("schedules", "ScheduleController.index");
   Route.post("schedules", "ScheduleController.store");
   Route.get("schedules/:id", "ScheduleController.show");
+  Route.get("schedules/user/:user_id", "ScheduleController.show");
 
   Route.delete("interests/:id", "InterestController.destroy");
   Route.get("interests", "InterestController.index");

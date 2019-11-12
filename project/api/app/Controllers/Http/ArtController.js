@@ -36,8 +36,6 @@ class ArtController extends BaseController {
       arts.where("title", "ILIKE", `%${title}%`)
     }
 
-
-
     return this.responseSuccess({
       response,
       statusCode: 200,

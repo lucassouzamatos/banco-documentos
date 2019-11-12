@@ -98,23 +98,29 @@ class ScheduleController extends BaseController {
    * @param {View} ctx.view
    */
   async show ({ params, request, response, view }) {
-    const { id } = params;
-    if (!id) {
+    const { id, user_id } = params;
+    if (!id && !user_id) {
       return this.responseError({
         response,
         statusCode: 400,
-        errors: ["Agenda não especificada"]
+        errors: ["Agenda ou usuário não especificado(a)"]
       });
     }
 
-    const schedule = await Schedule
+    const schedule = Schedule
       .query()
-      .where({ id })
       .with("user")
       .with("scheduleDates", builder => {
         builder.with("scheduled")
       })
-      .first();
+
+    if (id) {
+      schedule.where({ id })
+    }
+
+    if (user_id) {
+      schedule.where("user_id", user_id)
+    }
 
     if (!schedule) {
       return this.responseError({
@@ -127,7 +133,7 @@ class ScheduleController extends BaseController {
     return this.responseSuccess({
       response,
       statusCode: 200,
-      data: schedule
+      data: await schedule.first()
     });
   }
 
