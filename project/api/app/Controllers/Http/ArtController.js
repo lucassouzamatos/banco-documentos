@@ -24,11 +24,19 @@ class ArtController extends BaseController {
    * @param {View} ctx.view
    */
   async index ({ request, response }) {
-    const { user_id } = request.get();
+    const { user_id, title } = request.get();
     const arts = Art.query()
+      .with("style")
 
-    if (user_id)
+    if (user_id) {
       arts.where("user_id", user_id)
+    }
+
+    if (title) {
+      arts.where("title", "ILIKE", `%${title}%`)
+    }
+
+
 
     return this.responseSuccess({
       response,
@@ -59,7 +67,8 @@ class ArtController extends BaseController {
       "path",
       "price",
       "dimensions",
-      "user_id"
+      "user_id",
+      "style_id"
     ])
 
     try {
@@ -96,11 +105,16 @@ class ArtController extends BaseController {
       }
     }
 
-    const art = await Art.create({
+    let art = await Art.create({
       ...data,
       user_id: currentUser.id,
       path: '/uploads/' + image.fileName
     })
+
+    art = await Art.query()
+      .where("id", art.id)
+      .with("style")
+      .first()
 
     return this.responseSuccess({
       response,
@@ -128,7 +142,11 @@ class ArtController extends BaseController {
       });
     }
 
-    const art = await Art.findBy({ id });
+    const art = await Art.query()
+      .where("id", id)
+      .with("style")
+      .first()
+
     if (!art) {
       return this.responseError({
         response,
