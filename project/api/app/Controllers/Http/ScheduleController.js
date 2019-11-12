@@ -109,7 +109,11 @@ class ScheduleController extends BaseController {
 
     const schedule = Schedule
       .query()
-      .with("user")
+      .with("user", builder => {
+        builder.with("artistStyles", builder => {
+          builder.with("style")
+        })
+      })
       .with("scheduleDates", builder => {
         builder.with("scheduled")
       })
