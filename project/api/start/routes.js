@@ -51,6 +51,7 @@ Route.group(() => {
   Route.get("schedules", "ScheduleController.index");
   Route.post("schedules", "ScheduleController.store");
   Route.get("schedules/:id", "ScheduleController.show");
+  Route.get("schedules/user/:user_id", "ScheduleController.show");
 
   Route.delete("interests/:id", "InterestController.destroy");
   Route.get("interests", "InterestController.index");
@@ -67,4 +68,5 @@ Route.group(() => {
   Route.delete("scheduleds/:id", "ScheduledController.destroy");
   Route.get("scheduleds", "ScheduledController.index");
   Route.post("scheduleds", "ScheduledController.store");
+  Route.put("scheduleds/:id", "ScheduledController.update");
 }).prefix("api/v1");

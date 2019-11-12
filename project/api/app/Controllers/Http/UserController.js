@@ -38,6 +38,9 @@ class UserController extends BaseController {
       .with("city", builder => {
         builder.with("state");
       })
+      .with("artistStyles", builder => {
+        builder.with("style")
+      })
 
     if (role) {
       users.where("role", role)

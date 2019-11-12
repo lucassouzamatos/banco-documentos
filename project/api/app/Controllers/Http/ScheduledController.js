@@ -63,30 +63,6 @@ class ScheduledController extends BaseController {
   }
 
   /**
-   * Display a single scheduled.
-   * GET scheduleds/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
-  }
-
-  /**
-   * Render a form to update an existing scheduled.
-   * GET scheduleds/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
    * Update scheduled details.
    * PUT or PATCH scheduleds/:id
    *
@@ -95,17 +71,30 @@ class ScheduledController extends BaseController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
-  }
+    const data = request.only([
+      "done"
+    ])
 
-  /**
-   * Delete a scheduled with id.
-   * DELETE scheduleds/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+    const scheduled = await Scheduled.findOrFail(params.id);
+
+    if (!scheduled) {
+      return this.responseError({
+        response,
+        statusCode: 400,
+        errors: ["Agendamento não encontrado"]
+      });
+    }
+
+    await scheduled.merge(data);
+    await scheduled.save();
+
+    return this.responseSuccess({
+      response,
+      statusCode: 200,
+      data: {
+        scheduled
+      }
+    });
   }
 }
 

@@ -29,7 +29,7 @@ class ReviewController extends BaseController {
     if (user_id)
       reviews.where("user_id", user_id)
 
-    review.withCount("likes")
+    reviews.withCount("likes")
 
     return this.responseSuccess({
       response,

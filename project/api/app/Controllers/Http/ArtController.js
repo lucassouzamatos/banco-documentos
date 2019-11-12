@@ -9,6 +9,7 @@ const User = use("App/Models/User");
 const BaseController = use("App/Controllers/Http/BaseController");
 const FileUpload = use("FileUpload")
 const UserBusiness = use("UserBusiness")
+const moment = require("moment")
 
 /**
  * Resourceful controller for interacting with arts
@@ -24,11 +25,17 @@ class ArtController extends BaseController {
    * @param {View} ctx.view
    */
   async index ({ request, response }) {
-    const { user_id } = request.get();
+    const { user_id, title } = request.get();
     const arts = Art.query()
+      .with("style")
 
-    if (user_id)
+    if (user_id) {
       arts.where("user_id", user_id)
+    }
+
+    if (title) {
+      arts.where("title", "ILIKE", `%${title}%`)
+    }
 
     return this.responseSuccess({
       response,
@@ -59,7 +66,9 @@ class ArtController extends BaseController {
       "path",
       "price",
       "dimensions",
-      "user_id"
+      "user_id",
+      "style_id",
+      "duration"
     ])
 
     try {
@@ -96,11 +105,16 @@ class ArtController extends BaseController {
       }
     }
 
-    const art = await Art.create({
+    let art = await Art.create({
       ...data,
       user_id: currentUser.id,
       path: '/uploads/' + image.fileName
     })
+
+    art = await Art.query()
+      .where("id", art.id)
+      .with("style")
+      .first()
 
     return this.responseSuccess({
       response,
@@ -128,7 +142,21 @@ class ArtController extends BaseController {
       });
     }
 
-    const art = await Art.findBy({ id });
+    const art = await Art.query()
+      .where("id", id)
+      .with("style")
+      .with("user", builder => {
+        builder.with("city")
+        builder.with("schedule", builder => {
+          builder.with("scheduleDates", builder => {
+            builder
+              .where("date", ">", moment().format("YYYY-MM-DD hh:mm"))
+              .orderBy("date")
+          })
+        })
+      })
+      .first()
+
     if (!art) {
       return this.responseError({
         response,
