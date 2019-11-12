@@ -49,6 +49,10 @@ class User extends Model {
     return this.hasMany('App/Models/ArtistStyle')
   }
 
+  schedule () {
+    return this.belongsTo('App/Models/Schedule', 'id', 'user_id')
+  }
+
   isStudio () {
     return this.role == 'STUDIO'
   }

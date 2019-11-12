@@ -9,6 +9,7 @@ const User = use("App/Models/User");
 const BaseController = use("App/Controllers/Http/BaseController");
 const FileUpload = use("FileUpload")
 const UserBusiness = use("UserBusiness")
+const moment = require("moment")
 
 /**
  * Resourceful controller for interacting with arts
@@ -146,6 +147,13 @@ class ArtController extends BaseController {
       .with("style")
       .with("user", builder => {
         builder.with("city")
+        builder.with("schedule", builder => {
+          builder.with("scheduleDates", builder => {
+            builder
+              .where("date", ">", moment().format("YYYY-MM-DD hh:mm"))
+              .orderBy("date")
+          })
+        })
       })
       .first()
 
