@@ -144,6 +144,9 @@ class ArtController extends BaseController {
     const art = await Art.query()
       .where("id", id)
       .with("style")
+      .with("user", builder => {
+        builder.with("city")
+      })
       .first()
 
     if (!art) {
