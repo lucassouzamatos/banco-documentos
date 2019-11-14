@@ -73,12 +73,17 @@ class InterestController extends BaseController {
       });
     }
     data.user_id = user.id
-    const interest = await Interest.create(data)
+
+    await Interest.create(data)
+    const interests = await Interest.query()
+      .where("user_id", user.id)
+      .with("style")
+      .fetch()
 
     return this.responseSuccess({
       response,
       statusCode: 200,
-      data: { interest }
+      data: { interests }
     });
   }
 
