@@ -49,6 +49,10 @@ class User extends Model {
     return this.hasMany('App/Models/ArtistStyle')
   }
 
+  art () {
+    return this.hasMany('App/Models/Art')
+  }
+
   schedule () {
     return this.belongsTo('App/Models/Schedule', 'id', 'user_id')
   }
