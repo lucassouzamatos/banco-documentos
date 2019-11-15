@@ -33,7 +33,9 @@ const StyleSelector = () => {
       user_id: profile.id,
     });
 
-    setUserStyles([...userStyles, response.data.data.artistStyle]);
+    console.log(response.data.data.artistStyle);
+
+    // setUserStyles([...userStyles, response.data.data.artistStyle]);
 
     toast.success('Estilo adicionado com sucesso');
   };

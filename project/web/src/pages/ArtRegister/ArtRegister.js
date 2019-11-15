@@ -84,7 +84,7 @@ const ArtRegister = () => {
     };
 
     loadStyles();
-  }, []);
+  }, [profile.id]);
 
   return (
     <Container>

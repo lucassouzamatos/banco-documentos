@@ -21,7 +21,7 @@ const Profile = () => {
     };
 
     loadStyles();
-  }, []);
+  }, [profile.id]);
 
   function handleSignOut() {
     dispatch(signOut());
