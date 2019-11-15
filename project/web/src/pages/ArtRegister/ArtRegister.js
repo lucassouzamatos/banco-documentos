@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Form } from '@rocketseat/unform';
+import { Form, Select } from '@rocketseat/unform';
+import { useSelector } from 'react-redux';
 
 import { toast } from 'react-toastify';
 import api from '~/services/api';
 import { RegisterContainer, FlexContainer, Subtitle } from './styles';
 import { Button, Container, Input, Title } from '~/ui';
+import history from '~/services/history';
 
 const ArtRegister = () => {
   const { id } = useParams();
 
+  const profile = useSelector(state => state.user.profile);
+  const [styles, setStyles] = useState([]);
   const [artist, setArtist] = useState(null);
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -27,6 +31,7 @@ const ArtRegister = () => {
         await api.post(`arts`, formData);
 
         toast.success('Arte cadastrada com sucesso!');
+        history.push('/arts');
       } catch (error) {
         if (error.response.data.errors) {
           const errorsMessage = error.response.data.errors.reduce(
@@ -69,6 +74,18 @@ const ArtRegister = () => {
     }
   }, [id]);
 
+  useEffect(() => {
+    const loadStyles = async () => {
+      const response = await api.get(`artist-styles?user_id=${profile.id}`);
+
+      setStyles(
+        response.data.data.artistStyles.map(artistStyle => artistStyle.style)
+      );
+    };
+
+    loadStyles();
+  }, []);
+
   return (
     <Container>
       <div>
@@ -96,9 +113,9 @@ const ArtRegister = () => {
             <Input id="description" type="text" required label="Descrição" />
             <Input id="price" type="text" required label="Preço" />
 
-            {/* <div>
-              <Select name="style" label="Estilo" options={styles} />
-            </div> */}
+            <div>
+              <Select name="style_id" label="Estilo" options={styles} />
+            </div>
           </FlexContainer>
 
           <Button background="#292C2F" type="submit">

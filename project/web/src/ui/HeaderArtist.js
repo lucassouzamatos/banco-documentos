@@ -19,9 +19,11 @@ const HeaderArtist = () => {
       <nav>
         <ul>
           <li>
-            <Link to="/artists">
-              <MdHome size={21} /> Home Page
-            </Link>
+            {role === 'ARTIST' && (
+              <Link to="/arts">
+                <MdHome size={21} /> Home Page
+              </Link>
+            )}
           </li>
           <li>
             <Link to="/profile">

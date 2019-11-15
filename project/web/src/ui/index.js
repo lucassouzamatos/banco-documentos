@@ -8,3 +8,4 @@ export { default as HeaderArtist } from './HeaderArtist';
 export { default as HeaderClient } from './HeaderClient';
 export { default as ActionButton } from './ActionButton';
 export { default as Input } from './Input';
+export { default as StyleSelector } from './StyleSelector';

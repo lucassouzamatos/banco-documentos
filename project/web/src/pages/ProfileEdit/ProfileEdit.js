@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Form, Select } from '@rocketseat/unform';
 
 import { Container } from './styles';
-import { Button, Input, Title } from '~/ui';
+import { Button, Input, StyleSelector, Title } from '~/ui';
 
 import { updateProfileRequest } from '~/store/modules/user/actions';
 
@@ -48,6 +48,8 @@ const ProfileEdit = () => {
         <Input id="address" type="text" required label="Endereço" />
         <Select name="state" label="Estado" options={states} />
         <Select name="city_id" label="Cidade" options={cities} />
+
+        <StyleSelector />
 
         <Button background="#292C2F" type="submit">
           Salvar

@@ -33,7 +33,7 @@ const HeaderClient = () => {
         <Menu>
           <ul>
             <li>
-              <Link to="/">
+              <Link to="/home">
                 <MdHome size={18} />
                 Homepage
               </Link>
