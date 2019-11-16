@@ -22,15 +22,20 @@ class ReviewController extends BaseController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ request, response, auth }) {
     const { user_id } = request.get();
+    const user = await auth.getUser()
 
     let reviews = Review.query()
 
     if (user_id)
       reviews.where("user_id", user_id)
 
-    reviews.withCount("likes")
+      reviews
+        .withCount("likes")
+        .withCount("likes as liked", builder => {
+          builder.where("user_id", user.id)
+        })
 
     return this.responseSuccess({
       response,
@@ -128,8 +133,10 @@ class ReviewController extends BaseController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show ({ params, auth, response }) {
     const { id } = params;
+    const user = await auth.getUser()
+
     if (!id) {
       return this.responseError({
         response,
@@ -142,6 +149,10 @@ class ReviewController extends BaseController {
       .query()
       .where({ id })
       .with("user")
+      .withCount("likes")
+      .withCount("likes as liked", builder => {
+        builder.where("user_id", user.id)
+      })
       .first();
 
     if (!review) {
