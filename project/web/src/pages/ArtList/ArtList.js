@@ -1,20 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { Form } from '@rocketseat/unform';
 
-import { useSelector } from 'react-redux';
-
-import { FlexContainer } from './styles';
-import { ArtContainer, Button, Container, HeaderContainer, Title } from '~/ui';
+import { FlexContainer, HeaderSearch } from './styles';
+import {
+  ArtContainer,
+  Button,
+  Container,
+  HeaderContainer,
+  SearchInput,
+  Title,
+} from '~/ui';
 import api, { host } from '~/services/api';
 import toMoney from '~/utils/to-money';
+import { useProfile } from '~/hooks';
 
 const ArtList = () => {
-  const profile = useSelector(state => state.user.profile);
+  const profile = useProfile();
   const [arts, setArts] = useState([]);
 
-  useEffect(() => {
-    async function loadArts() {
-      const response = await api.get(`arts?user_id=${profile.id}`);
+  const loadArts = useCallback(
+    async (title = '') => {
+      const response = await api.get(
+        `arts?user_id=${profile.id}&title=${title}`
+      );
 
       setArts(
         response.data.data.arts.map(art => {
@@ -24,21 +33,34 @@ const ArtList = () => {
           };
         })
       );
-    }
+    },
+    [profile.id]
+  );
 
+  useEffect(() => {
     loadArts();
-  }, [profile.id]);
+  }, [loadArts]);
+
+  const handleSubmit = data => {
+    loadArts(data.busca);
+  };
 
   return (
     <Container>
       <HeaderContainer>
-        <Title>Minhas artes</Title>
+        <HeaderSearch>
+          <Title>Minhas artes</Title>
+          <Form onSubmit={handleSubmit}>
+            <SearchInput />
+          </Form>
+        </HeaderSearch>
         <Button to="/arts/new" background="#D9A327" as={Link}>
           Adicionar
         </Button>
       </HeaderContainer>
 
       <FlexContainer>
+        {arts.length === 0 && <p>Nenhuma arte cadastrada.</p>}
         {arts.map(art => (
           <ArtContainer key={art.id}>
             <img src={`${host}/${art.path}`} alt="Tattoo" />

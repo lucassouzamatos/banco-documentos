@@ -13,10 +13,70 @@ export const ArtsContainer = styled.div`
   flex-flow: row wrap;
 `;
 
-export const ModalContent = styled.div`
-  img {
+export const ModalContent = styled.div``;
+
+export const ArtImage = styled.img`
+  width: 100%;
+  max-height: 450px;
+  object-fit: contain;
+`;
+
+export const FormContainer = styled.div`
+  align-items: center;
+  display: flex;
+  padding: 16px 0;
+  justify-content: space-between;
+
+  input {
+    border-radius: 30px;
+    border: 1px solid #95989a;
+    padding: 4px 16px;
+  }
+
+  select {
+    width: 15%;
+    margin: 0;
+  }
+`;
+
+export const InputContainer = styled.div`
+  width: 68%;
+  position: relative;
+
+  input {
     width: 100%;
-    max-height: 450px;
-    object-fit: cover;
+  }
+
+  button {
+    position: absolute;
+    right: 8px;
+    top: 3px;
+    background: none;
+    border: none;
+  }
+`;
+
+export const Avatar = styled.img`
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+export const ArtContent = styled.div`
+  display: flex;
+`;
+
+export const ArtInfo = styled.div`
+  flex-grow: 1;
+`;
+
+export const ArtistInfo = styled.div`
+  text-align: center;
+  border-left: 1px solid #e8e8e8;
+  padding: 8px 16px;
+
+  button {
+    margin-top: 8px;
   }
 `;

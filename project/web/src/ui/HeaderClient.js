@@ -33,31 +33,31 @@ const HeaderClient = () => {
         <Menu>
           <ul>
             <li>
-              <Link to="/home">
+              <Link to="/home" onClick={() => toggleMenu()}>
                 <MdHome size={18} />
                 Homepage
               </Link>
             </li>
             <li>
-              <Link to="/profile">
+              <Link to="/profile" onClick={() => toggleMenu()}>
                 <MdPerson size={18} />
                 Meus dados
               </Link>
             </li>
             <li>
-              <Link to="/schedule">
+              <Link to="/schedule" onClick={() => toggleMenu()}>
                 <MdInsertInvitation size={18} />
                 Agenda
               </Link>
             </li>
             <li>
-              <Link to="/notifications">
+              <Link to="/notifications" onClick={() => toggleMenu()}>
                 <MdNotifications size={18} />
                 Notificações
               </Link>
             </li>
             <li>
-              <Link to="/">
+              <Link to="/" onClick={() => toggleMenu()}>
                 <MdExplore size={18} />
                 Explorar
               </Link>
@@ -84,6 +84,12 @@ export const MenuButton = styled.button`
 `;
 
 export const Menu = styled.div`
+  background: #3b444e;
+  position: absolute;
+  right: 0;
+  top: 55px;
+  z-index: 999;
+
   &::before {
     content: '';
     position: absolute;
@@ -95,11 +101,6 @@ export const Menu = styled.div`
     border-right: 5px solid transparent;
     border-bottom: 8px solid #3b444e;
   }
-
-  background: #3b444e;
-  position: absolute;
-  right: 0;
-  top: 55px;
 
   a {
     display: flex;

@@ -43,7 +43,7 @@ export function* signInGoogle({ payload }) {
 
     yield put(signInSuccess(token, user));
 
-    history.push('/profile');
+    history.push('/home');
   } catch (err) {
     toast.error('Falha na autenticação, verifique suas credenciais.');
     yield put(signFailure());

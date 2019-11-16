@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import {
@@ -10,9 +9,10 @@ import {
   MdPeople,
   MdExplore,
 } from 'react-icons/md';
+import { useProfile } from '~/hooks';
 
 const HeaderArtist = () => {
-  const role = useSelector(state => state.user.profile.role);
+  const { role } = useProfile();
 
   return (
     <Container>

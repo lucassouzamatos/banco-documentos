@@ -7,7 +7,7 @@ import api from '~/services/api';
 export function* updateProfile({ payload }) {
   try {
     const { data } = payload;
-    const response = yield call(api.put, `users/${data.id}`, data);
+    const response = yield call(api.put, `users/${data.get('id')}`, data);
 
     toast.success('Perfil atualizado com sucesso');
 

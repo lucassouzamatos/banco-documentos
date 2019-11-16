@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Form, Select } from '@rocketseat/unform';
-import { useSelector } from 'react-redux';
 
 import { toast } from 'react-toastify';
 import api from '~/services/api';
 import { RegisterContainer, FlexContainer, Subtitle } from './styles';
 import { Button, Container, Input, Title } from '~/ui';
 import history from '~/services/history';
+import { useProfile } from '~/hooks';
+import defaultImage from '~/assets/default.jpg';
 
 const ArtRegister = () => {
   const { id } = useParams();
 
-  const profile = useSelector(state => state.user.profile);
+  const profile = useProfile();
   const [styles, setStyles] = useState([]);
   const [artist, setArtist] = useState(null);
   const [image, setImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState(defaultImage);
 
   function handleSubmit(data) {
     async function createArt() {
@@ -100,19 +101,28 @@ const ArtRegister = () => {
           {imagePreview && <img src={imagePreview} alt="Tattoo" />}
 
           <input id="image" type="file" onChange={onChangeFile} />
+
           <Button background="#D9A327" htmlFor="image" as="label">
             Carregar
           </Button>
 
           <FlexContainer>
             <Input id="title" type="text" required label="Título" />
-            <Input id="size" type="text" required label="Dimensões" />
+            <Input id="dimensions" type="text" required label="Dimensões" />
           </FlexContainer>
 
           <FlexContainer>
             <Input id="description" type="text" required label="Descrição" />
             <Input id="price" type="text" required label="Preço" />
+          </FlexContainer>
 
+          <FlexContainer>
+            <Input
+              id="duration"
+              type="text"
+              required
+              label="Tempo estimado para realização"
+            />
             <div>
               <Select name="style_id" label="Estilo" options={styles} />
             </div>
