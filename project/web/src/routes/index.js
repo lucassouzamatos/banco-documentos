@@ -3,6 +3,7 @@ import { Switch } from 'react-router-dom';
 import Route from './Route';
 
 import Home from '../pages/Home';
+import HomeClient from '../pages/HomeClient';
 import Login from '../pages/Login';
 import Profile from '../pages/Profile';
 import ProfileEdit from '../pages/ProfileEdit';
@@ -20,6 +21,7 @@ export default function Routes() {
   return (
     <Switch>
       <Route path="/" exact component={Home} />
+      <Route path="/home" component={HomeClient} isPrivate />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
       <Route path="/profile/edit" component={ProfileEdit} isPrivate />

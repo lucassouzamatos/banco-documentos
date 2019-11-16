@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 
-import { useSelector } from 'react-redux';
 import { MdBookmark, MdPlace } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import api from '~/services/api';
 import { Artist, ContainerFlex } from './styles';
 import { Button, Container, HeaderContainer, Title } from '~/ui';
+import { useProfile } from '~/hooks';
 
 Modal.setAppElement('#root');
 
 const ArtistList = () => {
   const [artists, setArtists] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const profile = useSelector(state => state.user.profile);
+  const profile = useProfile;
   const [users, setUsers] = useState([]);
 
   function addArtist(user) {

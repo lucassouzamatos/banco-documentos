@@ -71,7 +71,7 @@ const ArtistProfile = () => {
             <div>
               <h3>{art.title}</h3>
               <ul>
-                <li>15x20cm</li>
+                <li>{art.dimensions}</li>
                 <li>{art.price}</li>
               </ul>
             </div>

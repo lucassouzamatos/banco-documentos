@@ -20,7 +20,7 @@ const ArtContainer = styled.div`
   img {
     width: 100%;
     height: 230px;
-    object-fit: cover;
+    object-fit: contain;
   }
 
   li {
