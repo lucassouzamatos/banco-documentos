@@ -18,13 +18,15 @@ class ArtController extends BaseController {
   /**
    * Show a list of all arts.
    * GET arts
+   
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index({ request, response }) {
+
+  async index ({ request, response, auth }) {
     const { user_id, title } = request.get();
     const arts = Art.query().with("style");
 
@@ -35,6 +37,8 @@ class ArtController extends BaseController {
     if (title) {
       arts.where("title", "ILIKE", `%${title}%`);
     }
+
+    const user = await auth.getUser()
 
     return this.responseSuccess({
       response,
