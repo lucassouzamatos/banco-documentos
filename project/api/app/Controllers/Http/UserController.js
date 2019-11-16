@@ -10,7 +10,12 @@ class UserController extends BaseController {
 
   async auth({ request, auth, response }) {
     const { email, password } = request.all();
-    const user = await User.findBy({ email });
+    const user = await User.query()
+      .where("email", email)
+      .with("city", builder => {
+        builder.with("state");
+      })
+      .first()
 
     if (!user) {
       return this.responseError({
