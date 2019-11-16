@@ -11,6 +11,33 @@ const BaseController = use("App/Controllers/Http/BaseController");
  * Resourceful controller for interacting with scheduleds
  */
 class ScheduledController extends BaseController {
+  async index({ response, request }) {
+    const { artist_id, customer_id } = request.get();
+
+    const scheduleds = Scheduled.query()
+      .with("art")
+
+    if (customer_id) {
+      scheduleds.where("customer_id", customer_id)
+    }
+
+    if (artist_id) {
+      scheduleds.whereHas("scheduleDates", builder => {
+        builder.whereHas("schedule", builder => {
+          builder.where("user_id", artist_id)
+        })
+      })
+    }
+
+    return this.responseSuccess({
+      response,
+      statusCode: 200,
+      data: {
+        scheduleds: await scheduleds.fetch()
+      }
+    });
+  }
+
   /**
    * Create/save a new scheduled.
    * POST scheduleds
@@ -22,7 +49,8 @@ class ScheduledController extends BaseController {
   async store ({ request, response }) {
     const data = request.only([
       "customer_id",
-      "schedule_date_id"
+      "schedule_date_id",
+      "art_id"
     ])
 
     if (!data.customer_id) {
@@ -42,9 +70,8 @@ class ScheduledController extends BaseController {
     }
 
     const scheduledExists = await Scheduled.query()
-    .where("customer_id", data.customer_id)
-    .where("schedule_date_id", data.schedule_date_id)
-    .first()
+      .where("schedule_date_id", data.schedule_date_id)
+      .first()
 
     if (scheduledExists) {
       return this.responseError({
