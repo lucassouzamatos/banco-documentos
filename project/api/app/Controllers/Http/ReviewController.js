@@ -31,11 +31,11 @@ class ReviewController extends BaseController {
     if (user_id)
       reviews.where("user_id", user_id)
 
-      reviews
-        .withCount("likes")
-        .withCount("likes as liked", builder => {
-          builder.where("user_id", user.id)
-        })
+    reviews
+      .withCount("likes")
+      .withCount("likes as liked", builder => {
+        builder.where("user_id", user.id)
+      })
 
     return this.responseSuccess({
       response,
@@ -63,7 +63,8 @@ class ReviewController extends BaseController {
     const data = request.only([
       "title",
       "description",
-      "scheduled_id"
+      "scheduled_id",
+      "score"
     ])
 
     if (!data.scheduled_id) {
@@ -179,6 +180,54 @@ class ReviewController extends BaseController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
+    let data = request.only([
+      "title",
+      "description",
+      "scheduled_id",
+      "score"
+    ])
+
+    const review = await Review.findOrFail(params.id);
+
+    if (!review) {
+      return this.responseError({
+        response,
+        statusCode: 400,
+        errors: ["Avaliação não encontrada"]
+      });
+    }
+
+    let image = request.file('image', {
+      types: ['image'],
+      size: '10mb'
+    })
+
+    if (image) {
+      try {
+        image = await FileUpload.upload(image)
+        data = {
+          ...data,
+          path: '/uploads/' + image.fileName
+        }
+      } catch(e) {
+        return this.responseError({
+          response,
+          statusCode: 400,
+          errors: e.message
+        });
+      }
+    }
+
+    await review.merge(data);
+    await review.save();
+
+    return this.responseSuccess({
+      response,
+      statusCode: 200,
+      data: {
+        review
+      }
+    });
   }
 
 }
