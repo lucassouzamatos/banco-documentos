@@ -110,7 +110,9 @@ class UserController extends BaseController {
       "cpf",
       "cnpj",
       "address",
-      "city_id"
+      "city_id",
+      "business_hours_start",
+      "business_hours_end"
     ]);
 
     let image = request.file('image', {
@@ -173,7 +175,9 @@ class UserController extends BaseController {
       "cpf",
       "cnpj",
       "address",
-      "city_id"
+      "city_id",
+      "business_hours_start",
+      "business_hours_end"
     ]);
 
     let image = request.file('image', {
