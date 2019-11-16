@@ -41,6 +41,9 @@ class UserController extends BaseController {
       .with("artistStyles", builder => {
         builder.with("style")
       })
+      .with("interests", builder => {
+        builder.with("style")
+      })
 
     if (role) {
       users.where("role", role)
@@ -82,6 +85,12 @@ class UserController extends BaseController {
         user: await User.query()
           .with("city")
           .where("id", params.id)
+          .with("artistStyles", builder => {
+            builder.with("style")
+          })
+          .with("interests", builder => {
+            builder.with("style")
+          })
           .first()
       }
     });
@@ -103,6 +112,17 @@ class UserController extends BaseController {
       types: ['image'],
       size: '10mb'
     })
+
+    const userExists = await User.findBy({ email: data.email })
+    if (userExists) {
+      return this.responseError({
+        response,
+        statusCode: 400,
+        errors: [
+          "Esse email já foi cadastrado"
+        ]
+      });
+    }
 
     if (image) {
       try {
@@ -131,7 +151,7 @@ class UserController extends BaseController {
   }
 
   async update({ response, params, request }) {
-    const user = await User.findOrFail(params.id);
+    const user = await User.find(params.id);
 
     if (!user) {
       return this.responseError({
@@ -155,6 +175,23 @@ class UserController extends BaseController {
       types: ['image'],
       size: '10mb'
     })
+
+    if (data.email) {
+      const userExists = await User.query()
+      .where("id", "<>", params.id)
+      .where("email", data.email)
+      .first()
+
+      if (userExists) {
+        return this.responseError({
+          response,
+          statusCode: 400,
+          errors: [
+            "Esse email já foi cadastrado"
+          ]
+        });
+      }
+    }
 
     if (image) {
       try {

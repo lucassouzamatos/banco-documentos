@@ -9,7 +9,7 @@ class Schedule extends Model {
     super.boot()
 
     this.addHook('beforeSave', async (schedule) => {
-      const user = await User.find(schedule.user_id)
+      const user = await User.find(schedule.dirty.user_id)
       if (!user) {
         throw new Error('É necessário definir um artista')
       }
