@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -7,9 +7,9 @@
 const Art = use("App/Models/Art");
 const User = use("App/Models/User");
 const BaseController = use("App/Controllers/Http/BaseController");
-const FileUpload = use("FileUpload")
-const UserBusiness = use("UserBusiness")
-const moment = require("moment")
+const FileUpload = use("FileUpload");
+const UserBusiness = use("UserBusiness");
+const moment = require("moment");
 
 /**
  * Resourceful controller for interacting with arts
@@ -24,17 +24,16 @@ class ArtController extends BaseController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response }) {
+  async index({ request, response }) {
     const { user_id, title } = request.get();
-    const arts = Art.query()
-      .with("style")
+    const arts = Art.query().with("style");
 
     if (user_id) {
-      arts.where("user_id", user_id)
+      arts.where("user_id", user_id);
     }
 
     if (title) {
-      arts.where("title", "ILIKE", `%${title}%`)
+      arts.where("title", "ILIKE", `%${title}%`);
     }
 
     return this.responseSuccess({
@@ -54,11 +53,11 @@ class ArtController extends BaseController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response, auth }) {
-    let image = request.file('image', {
-      types: ['image'],
-      size: '10mb'
-    })
+  async store({ request, response, auth }) {
+    let image = request.file("image", {
+      types: ["image"],
+      size: "10mb"
+    });
 
     const data = request.only([
       "title",
@@ -69,11 +68,11 @@ class ArtController extends BaseController {
       "user_id",
       "style_id",
       "duration"
-    ])
+    ]);
 
     try {
-      image = await FileUpload.upload(image)
-    } catch(e) {
+      image = await FileUpload.upload(image);
+    } catch (e) {
       return this.responseError({
         response,
         statusCode: 400,
@@ -81,9 +80,9 @@ class ArtController extends BaseController {
       });
     }
 
-    let currentUser = await auth.getUser()
+    let currentUser = await auth.getUser();
     if (data.user_id) {
-      const user = await User.find(data.user_id)
+      const user = await User.find(data.user_id);
       if (!user) {
         return this.responseError({
           response,
@@ -101,20 +100,20 @@ class ArtController extends BaseController {
       }
 
       if (await UserBusiness.belongsToStudio(user, currentUser)) {
-        currentUser = user
+        currentUser = user;
       }
     }
 
     let art = await Art.create({
       ...data,
       user_id: currentUser.id,
-      path: '/uploads/' + image.fileName
-    })
+      path: "/uploads/" + image.fileName
+    });
 
     art = await Art.query()
       .where("id", art.id)
       .with("style")
-      .first()
+      .first();
 
     return this.responseSuccess({
       response,
@@ -132,7 +131,7 @@ class ArtController extends BaseController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show({ params, request, response, view }) {
     const { id } = params;
     if (!id) {
       return this.responseError({
@@ -146,16 +145,18 @@ class ArtController extends BaseController {
       .where("id", id)
       .with("style")
       .with("user", builder => {
-        builder.with("city")
+        builder.with("city", builder => {
+          builder.with("state");
+        });
         builder.with("schedule", builder => {
           builder.with("scheduleDates", builder => {
             builder
               .where("date", ">", moment().format("YYYY-MM-DD hh:mm"))
-              .orderBy("date")
-          })
-        })
+              .orderBy("date");
+          });
+        });
       })
-      .first()
+      .first();
 
     if (!art) {
       return this.responseError({
@@ -180,8 +181,7 @@ class ArtController extends BaseController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
-  }
+  async update({ params, request, response }) {}
 
   /**
    * Delete a art with id.
@@ -191,8 +191,7 @@ class ArtController extends BaseController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
-  }
+  async destroy({ params, request, response }) {}
 }
 
-module.exports = ArtController
+module.exports = ArtController;

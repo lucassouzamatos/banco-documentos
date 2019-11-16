@@ -8,7 +8,7 @@ export const RegisterContainer = styled.div`
     width: 275px;
     height: 230px;
     display: block;
-    object-fit: cover;
+    object-fit: contain;
     margin: 16px auto;
   }
 
