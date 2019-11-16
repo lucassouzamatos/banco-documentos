@@ -59,7 +59,7 @@ class ScheduleDateController extends BaseController {
     const { art_id } = request.get();
     const scheduledates = ScheduleDate.query()
 
-    if (scheduledates) {
+    if (art_id) {
       scheduledates.whereHas("schedule", builder => {
         builder.whereHas("user", builder => {
           builder.whereHas("art", builder => {

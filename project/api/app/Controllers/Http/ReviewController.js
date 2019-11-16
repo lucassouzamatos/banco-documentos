@@ -5,6 +5,7 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 const Review = use("App/Models/Review");
+const Scheduled = use("App/Models/Scheduled");
 const FileUpload = use("FileUpload")
 const BaseController = use("App/Controllers/Http/BaseController");
 
@@ -57,7 +58,42 @@ class ReviewController extends BaseController {
     const data = request.only([
       "title",
       "description",
+      "scheduled_id"
     ])
+
+    if (!data.scheduled_id) {
+      return this.responseError({
+        response,
+        statusCode: 400,
+        errors: [
+          "É necessário definir o agendamento"
+        ]
+      });
+    }
+
+    const scheduled = await Scheduled.query()
+      .where("id", data.scheduled_id)
+      .first()
+
+    if (!scheduled) {
+      return this.responseError({
+        response,
+        statusCode: 400,
+        errors: [
+          "O agendamento não existe"
+        ]
+      });
+    }
+
+    if (!scheduled.done) {
+      return this.responseError({
+        response,
+        statusCode: 400,
+        errors: [
+          "Esse agendamento ainda não foi finalizado"
+        ]
+      });
+    }
 
     try {
       image = await FileUpload.upload(image)
@@ -134,16 +170,6 @@ class ReviewController extends BaseController {
   async update ({ params, request, response }) {
   }
 
-  /**
-   * Delete a review with id.
-   * DELETE reviews/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
-  }
 }
 
 module.exports = ReviewController
