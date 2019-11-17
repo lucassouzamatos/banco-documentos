@@ -49,6 +49,10 @@ class User extends Model {
     return this.hasMany('App/Models/ArtistStyle')
   }
 
+  notifications () {
+    return this.hasMany('App/Models/Notification')
+  }
+
   interests () {
     return this.hasMany('App/Models/Interest')
   }

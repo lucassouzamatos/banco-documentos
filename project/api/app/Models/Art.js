@@ -32,6 +32,17 @@ class Art extends Model {
 
     return query
   }
+
+  static scopeOrderByInterests(query, interests) {
+    query.orderBy(Database.raw(`
+      CASE
+        WHEN style_id IN (${String(interests)}) THEN 1
+        WHEN style_id NOT IN (${String(interests)}) THEN 2
+      END
+    `))
+
+    return query
+  }
 }
 
 module.exports = Art

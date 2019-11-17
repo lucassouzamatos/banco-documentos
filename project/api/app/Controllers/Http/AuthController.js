@@ -10,7 +10,7 @@ class AuthController extends BaseController {
   async google({ response, auth, request }) {
     const { email, googleId, name } = request.all()
 
-    const user = await User.findOrCreate({
+    let user = await User.findOrCreate({
       email,
       googleId
     }, {
@@ -21,6 +21,17 @@ class AuthController extends BaseController {
     })
 
     const token = await auth.generate(user);
+
+    user = await User.query()
+      .with("city", builder => {
+        builder.with("state");
+      })
+      .withCount("notifications as notifications_unread", builder => {
+        builder.where("read", false)
+      })
+      .where("id", user.id)
+      .first()
+
     return this.responseSuccess({
       response,
       statusCode: 200,
