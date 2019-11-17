@@ -45,9 +45,9 @@ const HeaderClient = () => {
               </Link>
             </li>
             <li>
-              <Link to="/schedule" onClick={() => toggleMenu()}>
+              <Link to="/schedule-list" onClick={() => toggleMenu()}>
                 <MdInsertInvitation size={18} />
-                Agenda
+                Meus agendamentos
               </Link>
             </li>
             <li>
@@ -57,7 +57,7 @@ const HeaderClient = () => {
               </Link>
             </li>
             <li>
-              <Link to="/" onClick={() => toggleMenu()}>
+              <Link to="/explore" onClick={() => toggleMenu()}>
                 <MdExplore size={18} />
                 Explorar
               </Link>

@@ -13,7 +13,7 @@ Modal.setAppElement('#root');
 const ArtistList = () => {
   const [artists, setArtists] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const profile = useProfile;
+  const profile = useProfile();
   const [users, setUsers] = useState([]);
 
   function addArtist(user) {

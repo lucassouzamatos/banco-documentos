@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import { Form, Select } from '@rocketseat/unform';
 
 import { MdBookmark, MdPlace } from 'react-icons/md';
-import { ArtContainer, Button, Container, SearchInput } from '~/ui';
+import { ArtContainer, Button, Container, FormSearch } from '~/ui';
 import {
   Avatar,
   ArtInfo,
@@ -12,7 +12,6 @@ import {
   ArtImage,
   ArtsContainer,
   BackgroundImage,
-  FormContainer,
   ModalContent,
 } from './styles';
 import api from '~/services/api';
@@ -32,37 +31,6 @@ const customStyles = {
   overlay: {
     background: 'rgba(0, 0, 0, 0.75)',
   },
-};
-
-const distance = [
-  {
-    id: 1,
-    title: '1km',
-  },
-  {
-    id: 2,
-    title: '2km',
-  },
-  {
-    id: 3,
-    title: '3km',
-  },
-];
-
-const sort = [
-  {
-    id: 1,
-    title: 'Mais recente',
-  },
-  {
-    id: 2,
-    title: 'Mais antigas',
-  },
-];
-
-const initialData = {
-  distance: 1,
-  sort: 1,
 };
 
 const HomeClient = () => {
@@ -171,13 +139,7 @@ const HomeClient = () => {
       </Modal>
       <BackgroundImage />
       <Container>
-        <Form onSubmit={handleSubmit} initialData={initialData}>
-          <FormContainer>
-            <SearchInput />
-            <Select name="distance" label="" options={distance} />
-            <Select name="sort" label="" options={sort} />
-          </FormContainer>
-        </Form>
+        <FormSearch handleSubmit={handleSubmit} />
 
         <ArtsContainer>
           {arts.map(art => (

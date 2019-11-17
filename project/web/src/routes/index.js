@@ -13,9 +13,10 @@ import ArtList from '../pages/ArtList';
 import ArtRegister from '../pages/ArtRegister';
 import ArtistProfile from '../pages/ArtistProfile';
 import ReviewRegister from '../pages/ReviewRegister';
-import ReviewList from '../pages/ReviewList';
+import Explore from '../pages/Explore';
 import Schedule from '../pages/Schedule';
 import Notifications from '../pages/Notifications';
+import ScheduleList from '../pages/ScheduleList';
 
 export default function Routes() {
   return (
@@ -32,9 +33,10 @@ export default function Routes() {
       <Route path="/arts" component={ArtList} isPrivate />
       <Route path="/artist/:id" component={ArtistProfile} isPrivate />
       <Route path="/reviews/:id" component={ReviewRegister} isPrivate />
-      <Route path="/reviews" component={ReviewList} isPrivate />
+      <Route path="/explore" component={Explore} isPrivate />
       <Route path="/schedule" component={Schedule} isPrivate />
       <Route path="/notifications" component={Notifications} isPrivate />
+      <Route path="/schedule-list" component={ScheduleList} isPrivate />
     </Switch>
   );
 }

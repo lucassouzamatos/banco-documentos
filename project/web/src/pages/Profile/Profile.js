@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { Button, DefinitionList, Title } from '~/ui';
+import { Button, DefinitionList, Title, StylesList } from '~/ui';
 
 import { signOut } from '~/store/modules/auth/actions';
-import { Container, H3, StyleItem, StyleContainer } from './styles';
+import { Container, H3 } from './styles';
 import api, { host } from '~/services/api';
 import { useProfile } from '~/hooks';
 
@@ -65,23 +65,21 @@ const Profile = () => {
           <dd>{profile.address}</dd>
 
           <dt>Cidade</dt>
-          <dd>{profile.city.name}</dd>
+          <dd>{profile.city ? profile.city.name : ' - '}</dd>
 
           <dt>Estado</dt>
-          <dd>lorem ipsum</dd>
+          <dd>
+            {profile.city && profile.city.state
+              ? profile.city.state.name
+              : ' - '}
+          </dd>
         </>
       </DefinitionList>
 
       {profile.role === 'ARTIST' && (
         <>
           <H3>Estilos</H3>
-          <StyleContainer>
-            {artistStyles.map(artistStyle => (
-              <StyleItem key={artistStyle.style.id}>
-                {artistStyle.style.title}
-              </StyleItem>
-            ))}
-          </StyleContainer>
+          <StylesList artistStyles={artistStyles} />
         </>
       )}
 

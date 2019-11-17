@@ -7,17 +7,36 @@ import { Button, Input, StyleSelector, Title } from '~/ui';
 
 import { updateProfileRequest } from '~/store/modules/user/actions';
 import { useProfile } from '~/hooks';
-import { host } from '~/services/api';
+import api, { host } from '~/services/api';
 import defaultImage from '~/assets/default.jpg';
-
-const states = [{ id: 1, title: 'Santa Catarina' }];
-const cities = [{ id: 1, title: 'Tubarão' }];
 
 const ProfileEdit = () => {
   const dispatch = useDispatch();
   const profile = useProfile();
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
+
+  useEffect(() => {
+    async function loadStates() {
+      const response = await api.get(`states`);
+
+      setStates(
+        response.data.data.states.map(state => ({
+          title: state.name,
+          id: state.id,
+        }))
+      );
+    }
+    loadStates();
+    setCities([
+      {
+        id: profile.city.id,
+        title: profile.city.name,
+      },
+    ]);
+  }, [profile]);
 
   useEffect(() => {
     if (profile.avatar) {
@@ -27,6 +46,20 @@ const ProfileEdit = () => {
 
     setImagePreview(defaultImage);
   }, [profile.avatar]);
+
+  function handleOnChangeState(state) {
+    async function loadCities() {
+      const response = await api.get(`cities?state_id=${state}`);
+
+      setCities(
+        response.data.data.cities.map(city => ({
+          title: city.name,
+          id: city.id,
+        }))
+      );
+    }
+    loadCities();
+  }
 
   function handleSubmit(data) {
     const formData = new FormData();
@@ -47,8 +80,10 @@ const ProfileEdit = () => {
     cnpj: profile.cnpj,
     address: profile.address,
     city_id: profile.city_id,
-    state: 'SC',
+    state: profile.city.state_id,
   };
+
+  console.log(initialData);
 
   function onChangeFile(e) {
     const [file] = e.target.files;
@@ -84,7 +119,14 @@ const ProfileEdit = () => {
           <Input id="cpf" type="text" required label="CPF" />
         )}
         <Input id="address" type="text" required label="Endereço" />
-        <Select name="state" label="Estado" options={states} />
+        {states && (
+          <Select
+            name="state"
+            label="Estado"
+            options={states}
+            onChange={e => handleOnChangeState(e.target.value)}
+          />
+        )}
         <Select name="city_id" label="Cidade" options={cities} />
 
         <StyleSelector />

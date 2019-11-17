@@ -10,3 +10,5 @@ export { default as ActionButton } from './ActionButton';
 export { default as Input } from './Input';
 export { default as StyleSelector } from './StyleSelector';
 export { default as SearchInput } from './SearchInput';
+export { default as FormSearch } from './FormSearch';
+export { default as StylesList } from './StylesList';
