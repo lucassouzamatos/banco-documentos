@@ -7,6 +7,7 @@
 const Art = use("App/Models/Art");
 const User = use("App/Models/User");
 const City = use("App/Models/City");
+const Notification = use("App/Models/Notification");
 const Database = use("Database");
 const BaseController = use("App/Controllers/Http/BaseController");
 const FileUpload = use("FileUpload");
@@ -142,6 +143,10 @@ class ArtController extends BaseController {
       }
 
       if (await UserBusiness.belongsToStudio(user, currentUser)) {
+        await Notification.create({
+          user_id: user.id,
+          description: `O estúdio ${currentUser.username} adicionou uma nova arte ao seu perfil`
+        })
         currentUser = user;
       }
     }
