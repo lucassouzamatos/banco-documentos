@@ -60,7 +60,7 @@ const ArtList = () => {
       </HeaderContainer>
 
       <FlexContainer>
-        {arts.length === 0 && <p>Nenhuma arte cadastrada.</p>}
+        {arts.length === 0 && <p>Nenhuma arte encontrada.</p>}
         {arts.map(art => (
           <ArtContainer key={art.id}>
             <img src={`${host}/${art.path}`} alt="Tattoo" />

@@ -21,24 +21,6 @@ export const ArtImage = styled.img`
   object-fit: contain;
 `;
 
-export const FormContainer = styled.div`
-  align-items: center;
-  display: flex;
-  padding: 16px 0;
-  justify-content: space-between;
-
-  input {
-    border-radius: 30px;
-    border: 1px solid #95989a;
-    padding: 4px 16px;
-  }
-
-  select {
-    width: 15%;
-    margin: 0;
-  }
-`;
-
 export const InputContainer = styled.div`
   width: 68%;
   position: relative;

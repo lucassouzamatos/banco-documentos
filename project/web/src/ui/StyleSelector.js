@@ -40,9 +40,7 @@ const StyleSelector = () => {
       user_id: profile.id,
     });
 
-    console.log(response.data.data.artistStyle);
-
-    // setUserStyles([...userStyles, response.data.data.artistStyle]);
+    setUserStyles(response.data.data.artistStyles);
 
     toast.success('Estilo adicionado com sucesso');
   };

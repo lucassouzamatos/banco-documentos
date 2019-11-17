@@ -51,7 +51,7 @@ const HeaderArtist = () => {
 
           {role === 'STUDIO' && (
             <li>
-              <Link to="/profile">
+              <Link to="/explore">
                 <MdExplore size={21} />
                 Explorar
               </Link>

@@ -42,6 +42,10 @@ const Schedule = () => {
         schedule_id: schedule.id,
       });
 
+      const response = await api.get(`schedules/user/${profile.id}`);
+
+      setSchedule(response.data.data);
+
       toast.success('Horário adicionado com sucesso');
     } catch (error) {
       toast.error('Erro ao adicionar horário');

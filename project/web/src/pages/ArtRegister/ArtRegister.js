@@ -29,9 +29,18 @@ const ArtRegister = () => {
 
         formData.append('image', image);
         formData.append('type', 'ARTIST_ART');
+        if (id) {
+          formData.append('user_id', id);
+        }
         await api.post(`arts`, formData);
 
         toast.success('Arte cadastrada com sucesso!');
+
+        if (id) {
+          history.push(`/artist/${id}`);
+          return;
+        }
+
         history.push('/arts');
       } catch (error) {
         if (error.response.data.errors) {
@@ -77,7 +86,9 @@ const ArtRegister = () => {
 
   useEffect(() => {
     const loadStyles = async () => {
-      const response = await api.get(`artist-styles?user_id=${profile.id}`);
+      const response = await api.get(
+        `artist-styles?user_id=${id || profile.id}`
+      );
 
       setStyles(
         response.data.data.artistStyles.map(artistStyle => artistStyle.style)
@@ -85,7 +96,7 @@ const ArtRegister = () => {
     };
 
     loadStyles();
-  }, [profile.id]);
+  }, [id, profile.id]);
 
   return (
     <Container>
