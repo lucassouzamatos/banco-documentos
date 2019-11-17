@@ -15,6 +15,9 @@ class UserController extends BaseController {
       .with("city", builder => {
         builder.with("state");
       })
+      .withCount("notifications as notifications_unread", builder => {
+        builder.where("read", false)
+      })
       .first()
 
     if (!user) {

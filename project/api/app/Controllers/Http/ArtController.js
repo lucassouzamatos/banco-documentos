@@ -7,6 +7,7 @@
 const Art = use("App/Models/Art");
 const User = use("App/Models/User");
 const City = use("App/Models/City");
+const Notification = use("App/Models/Notification");
 const Database = use("Database");
 const BaseController = use("App/Controllers/Http/BaseController");
 const FileUpload = use("FileUpload");
@@ -28,14 +29,35 @@ class ArtController extends BaseController {
    */
 
   async index ({ request, response, auth }) {
-    const { user_id, title, distance, style_id } = request.get();
+    const {
+      user_id,
+      title,
+      distance,
+      style_id,
+      order_by,
+      order
+    } = request.get();
+
     let user = await auth.getUser();
 
     const arts = Art.query().with("style");
 
+    if (order_by) {
+      arts.orderBy(order_by, order ? order : null)
+    }
+
     if (user_id) {
       arts.where("user_id", user_id);
+
+      return this.responseSuccess({
+        response,
+        statusCode: 200,
+        data: {
+          arts: await arts.fetch()
+        }
+      });
     }
+
     const interests = await Database.table("interests")
       .select("style_id")
       .where("user_id", user.id)
@@ -44,10 +66,6 @@ class ArtController extends BaseController {
     if (style_id) {
       arts
         .where("style_id", style_id)
-        .orWhereIn("style_id", interests)
-    } else {
-      arts
-        .whereIn("style_id", interests)
     }
 
     if (title) {
@@ -58,6 +76,8 @@ class ArtController extends BaseController {
       const { lon, lat }  = await City.find(user.city_id)
       arts.nearBy(lat, lon, user_id ? null : distance)
     }
+
+    arts.orderByInterests(interests)
 
     return this.responseSuccess({
       response,
@@ -123,6 +143,10 @@ class ArtController extends BaseController {
       }
 
       if (await UserBusiness.belongsToStudio(user, currentUser)) {
+        await Notification.create({
+          user_id: user.id,
+          description: `O estúdio ${currentUser.username} adicionou uma nova arte ao seu perfil`
+        })
         currentUser = user;
       }
     }

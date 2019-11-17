@@ -99,7 +99,8 @@ class ScheduledController extends BaseController {
    */
   async update ({ params, request, response }) {
     const data = request.only([
-      "done"
+      "done",
+      "accepted",
     ])
 
     const scheduled = await Scheduled.findOrFail(params.id);

@@ -69,4 +69,9 @@ Route.group(() => {
   Route.get("scheduleds", "ScheduledController.index");
   Route.post("scheduleds", "ScheduledController.store");
   Route.put("scheduleds/:id", "ScheduledController.update");
+
+  Route.put("notifications/:id", "NotificationController.update");
+  Route.get("notifications/:id", "NotificationController.show");
+  Route.get("notifications", "NotificationController.index");
+  Route.post("notifications", "NotificationController.store");
 }).prefix("api/v1");
