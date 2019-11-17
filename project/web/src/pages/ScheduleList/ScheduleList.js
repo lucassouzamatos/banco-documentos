@@ -7,9 +7,7 @@ const ScheduleList = () => {
 
   useEffect(() => {
     const loadSchedules = async () => {
-      const response = await api.get(`scheduleds?customer_id=${profile.id}`);
-
-      console.log(response.data.data.scheduleds);
+      await api.get(`scheduleds?customer_id=${profile.id}`);
     };
 
     loadSchedules();
