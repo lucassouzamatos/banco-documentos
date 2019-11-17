@@ -6,6 +6,8 @@
 
 const Art = use("App/Models/Art");
 const User = use("App/Models/User");
+const City = use("App/Models/City");
+const Database = use("Database");
 const BaseController = use("App/Controllers/Http/BaseController");
 const FileUpload = use("FileUpload");
 const UserBusiness = use("UserBusiness");
@@ -18,7 +20,6 @@ class ArtController extends BaseController {
   /**
    * Show a list of all arts.
    * GET arts
-   
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -27,18 +28,36 @@ class ArtController extends BaseController {
    */
 
   async index ({ request, response, auth }) {
-    const { user_id, title } = request.get();
+    const { user_id, title, distance, style_id } = request.get();
+    let user = await auth.getUser();
+
     const arts = Art.query().with("style");
 
     if (user_id) {
       arts.where("user_id", user_id);
+    }
+    const interests = await Database.table("interests")
+      .select("style_id")
+      .where("user_id", user.id)
+      .map(interest => interest.style_id)
+
+    if (style_id) {
+      arts
+        .where("style_id", style_id)
+        .orWhereIn("style_id", interests)
+    } else {
+      arts
+        .whereIn("style_id", interests)
     }
 
     if (title) {
       arts.where("title", "ILIKE", `%${title}%`);
     }
 
-    const user = await auth.getUser()
+    if (user.city_id) {
+      const { lon, lat }  = await City.find(user.city_id)
+      arts.nearBy(lat, lon, user_id ? null : distance)
+    }
 
     return this.responseSuccess({
       response,
