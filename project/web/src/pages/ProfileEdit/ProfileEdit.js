@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Form, Select } from '@rocketseat/unform';
+import { Form } from '@rocketseat/unform';
 
 import { Container } from './styles';
 import { Button, Input, StyleSelector, Title } from '~/ui';
@@ -17,6 +17,23 @@ const ProfileEdit = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
+  const [selectedState, setSelectedState] = useState(
+    profile.city && profile.city.state_id ? profile.city.state_id : null
+  );
+  const [selectedCity, setSelectedCity] = useState(
+    profile.city ? profile.city.id : null
+  );
+
+  async function loadCities(stateId) {
+    const response = await api.get(`cities?state_id=${stateId}`);
+
+    setCities(
+      response.data.data.cities.map(city => ({
+        title: city.name,
+        id: city.id,
+      }))
+    );
+  }
 
   useEffect(() => {
     async function loadStates() {
@@ -28,14 +45,13 @@ const ProfileEdit = () => {
           id: state.id,
         }))
       );
+
+      if (profile.city.state_id) {
+        loadCities(profile.city.state_id);
+      }
     }
+
     loadStates();
-    setCities([
-      {
-        id: profile.city.id,
-        title: profile.city.name,
-      },
-    ]);
   }, [profile]);
 
   useEffect(() => {
@@ -47,19 +63,15 @@ const ProfileEdit = () => {
     setImagePreview(defaultImage);
   }, [profile.avatar]);
 
-  function handleOnChangeState(state) {
-    async function loadCities() {
-      const response = await api.get(`cities?state_id=${state}`);
+  const handleOnChangeState = stateId => {
+    setSelectedState(stateId);
 
-      setCities(
-        response.data.data.cities.map(city => ({
-          title: city.name,
-          id: city.id,
-        }))
-      );
-    }
-    loadCities();
-  }
+    loadCities(stateId);
+  };
+
+  const handleOnChangeCity = cityId => {
+    setSelectedCity(cityId);
+  };
 
   function handleSubmit(data) {
     const formData = new FormData();
@@ -67,6 +79,7 @@ const ProfileEdit = () => {
       formData.append(item, data[item]);
     });
 
+    formData.append('city_id', selectedCity);
     formData.append('image', image);
     formData.append('id', profile.id);
 
@@ -79,11 +92,9 @@ const ProfileEdit = () => {
     cpf: profile.cpf,
     cnpj: profile.cnpj,
     address: profile.address,
-    city_id: profile.city_id,
-    state: profile.city.state_id,
+    city_id: null,
+    state: null,
   };
-
-  console.log(initialData);
 
   function onChangeFile(e) {
     const [file] = e.target.files;
@@ -119,17 +130,39 @@ const ProfileEdit = () => {
           <Input id="cpf" type="text" required label="CPF" />
         )}
         <Input id="address" type="text" required label="Endereço" />
-        {states && (
-          <Select
-            name="state"
-            label="Estado"
-            options={states}
-            onChange={e => handleOnChangeState(e.target.value)}
-          />
-        )}
-        <Select name="city_id" label="Cidade" options={cities} />
+        <label htmlFor="state">Estado</label>
+        <select
+          id="state"
+          required
+          name="state"
+          onChange={e => handleOnChangeState(e.target.value)}
+          value={selectedState}
+        >
+          <option>Selecione o estado</option>
+          {states.map(state => (
+            <option value={state.id} key={state.id}>
+              {state.title}
+            </option>
+          ))}
+        </select>
+        <label htmlFor="city">Cidade</label>
+        <select
+          id="city"
+          required
+          options={cities}
+          onChange={e => handleOnChangeCity(e.target.value)}
+          value={selectedCity}
+        >
+          <option value>Selecione a cidade</option>
+          {cities.map(city => (
+            <option value={city.id} key={city.id}>
+              {city.title}
+            </option>
+          ))}
+        </select>
 
-        <StyleSelector />
+        {profile.role === 'ARTIST' && <StyleSelector />}
+        {profile.role === 'CUSTOMER' && <StyleSelector type="interests" />}
 
         <Button background="#292C2F" type="submit">
           Salvar

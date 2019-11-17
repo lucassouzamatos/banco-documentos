@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import { MdClose, MdAdd } from 'react-icons/md';
 import api from '~/services/api';
 import { useProfile } from '~/hooks';
 
-const StyleSelector = () => {
+const StyleSelector = ({ type }) => {
   const profile = useProfile();
 
   const [styles, setStyles] = useState([]);
@@ -20,14 +21,16 @@ const StyleSelector = () => {
     }
 
     async function loadUserStyles() {
-      const response = await api.get(`artist-styles?user_id=${profile.id}`);
+      const response = await api.get(`${type}?user_id=${profile.id}`);
 
-      setUserStyles(response.data.data.artistStyles);
+      const keyName = type === 'artist-styles' ? 'artistStyles' : 'interests';
+
+      setUserStyles(response.data.data[keyName]);
     }
 
     loadUserStyles();
     loadStyles();
-  }, [profile.id]);
+  }, [profile.id, type]);
 
   const addStyle = async () => {
     if (!selectedStyle) {
@@ -35,18 +38,18 @@ const StyleSelector = () => {
       return;
     }
 
-    const response = await api.post(`artist-styles`, {
+    const response = await api.post(type, {
       style_id: selectedStyle,
       user_id: profile.id,
     });
 
-    setUserStyles(response.data.data.artistStyles);
+    setUserStyles(response.data.data[type]);
 
     toast.success('Estilo adicionado com sucesso');
   };
 
   const handleRemoveStyle = async userStyle => {
-    await api.delete(`artist-styles/${userStyle.id}`);
+    await api.delete(`${type}/${userStyle.id}`);
     setUserStyles(userStyles.filter(us => us.id !== userStyle.id));
 
     toast.success('Estilo removido com sucesso');
@@ -138,5 +141,13 @@ const StyleItem = styled.li`
     margin-left: 8px;
   }
 `;
+
+StyleSelector.propTypes = {
+  type: PropTypes.string,
+};
+
+StyleSelector.defaultProps = {
+  type: 'artist-styles',
+};
 
 export default StyleSelector;
