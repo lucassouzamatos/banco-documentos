@@ -11,16 +11,12 @@
 */
 
 /** @type {import('@adonisjs/lucid/src/Database')} */
-const Database = use('Database')
+const City = use("App/Models/City");
+const cities = require('./cities')
 
 class CitySeeder {
   static async run () {
-    await Database.table('cities').insert([
-      {
-        name: 'Tubarão',
-        state_id: 1
-      }
-    ])
+    await City.createMany(cities)
   }
 
   async run () {
