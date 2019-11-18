@@ -46,6 +46,10 @@ class ArtController extends BaseController {
       arts.orderBy(order_by, order ? order : null)
     }
 
+    if (title) {
+      arts.where("title", "ILIKE", `%${title}%`);
+    }
+
     if (user_id) {
       arts.where("user_id", user_id);
 
@@ -66,10 +70,6 @@ class ArtController extends BaseController {
     if (style_id) {
       arts
         .where("style_id", style_id)
-    }
-
-    if (title) {
-      arts.where("title", "ILIKE", `%${title}%`);
     }
 
     if (user.city_id) {
