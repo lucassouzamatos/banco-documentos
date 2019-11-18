@@ -77,7 +77,9 @@ class ArtController extends BaseController {
       arts.nearBy(lat, lon, user_id ? null : distance)
     }
 
-    arts.orderByInterests(interests)
+    if (!user.isStudio()) {
+      arts.orderByInterests(interests)
+    }
 
     return this.responseSuccess({
       response,
