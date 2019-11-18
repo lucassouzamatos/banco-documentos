@@ -28,6 +28,14 @@ const Explore = () => {
           user_id: profile.id,
           review_id: review.id,
         });
+
+        const loadArts = async () => {
+          const response = await api.get(`reviews`);
+
+          setReviews(response.data.data.reviews);
+        };
+
+        loadArts();
       }
     } catch (error) {
       toast.error('Erro ao curtir review');
