@@ -1,37 +1,56 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { MdThumbUp } from 'react-icons/md';
+import { toast } from 'react-toastify';
 import { ArtsContainer, LikeButton } from './styles';
-import { ArtContainer, Container, FormSearch, Title } from '~/ui';
+import { ArtContainer, Container, Title } from '~/ui';
+import api, { host } from '~/services/api';
+import { useProfile } from '~/hooks';
 
 const Explore = () => {
-  const handleSubmit = data => {
-    console.log(data);
+  const [reviews, setReviews] = useState([]);
+  const profile = useProfile();
+
+  useEffect(() => {
+    const loadArts = async () => {
+      const response = await api.get(`reviews`);
+
+      setReviews(response.data.data.reviews);
+    };
+
+    loadArts();
+  }, []);
+
+  const handleLikeReview = async review => {
+    try {
+      if (review.__meta__.liked === '0') {
+        await api.post('likes', {
+          user_id: profile.id,
+          review_id: review.id,
+        });
+      }
+    } catch (error) {
+      toast.error('Erro ao curtir review');
+    }
   };
 
   return (
     <Container>
       <Title>Explorar</Title>
-      <FormSearch handleSubmit={handleSubmit} />
 
       <ArtsContainer>
-        {[0, 1, 2, 3].map(item => (
-          <ArtContainer key={item}>
-            <img
-              src="https://www.tattooja.com.br/img/blog/tatuagem-nos-dedos-saiba-tudo-que-precisa-ideias-inspiradoras-para-tattoo-topo-1720742430.jpg"
-              alt=""
-            />
+        {reviews.map(review => (
+          <ArtContainer key={review.id}>
+            <img src={`${host}/${review.path}`} alt="" />
             <div>
-              <h3>Título</h3>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Temporibus adipisci vel, autem provident, molestiae ad atque
-                asperiores saepe assumenda error debitis optio totam earum
-                aperiam molestias blanditiis doloremque quas. Dicta?
-              </p>
-              <LikeButton type="button">
+              <h3>{review.title}</h3>
+              <p>{review.description}</p>
+              <LikeButton
+                type="button"
+                onClick={() => handleLikeReview(review)}
+              >
                 <MdThumbUp size={21} />
-                129 likes
+                {review.__meta__.likes_count} likes
               </LikeButton>
             </div>
           </ArtContainer>
