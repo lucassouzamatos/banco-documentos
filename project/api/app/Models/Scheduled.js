@@ -76,6 +76,10 @@ class Scheduled extends Model {
   art () {
     return this.belongsTo('App/Models/Art')
   }
+
+  review () {
+    return this.hasOne('App/Models/Review')
+  }
 }
 
 module.exports = Scheduled

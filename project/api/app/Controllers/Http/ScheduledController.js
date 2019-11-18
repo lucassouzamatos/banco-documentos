@@ -18,7 +18,9 @@ class ScheduledController extends BaseController {
       .with("art")
 
     if (customer_id) {
-      scheduleds.where("customer_id", customer_id)
+      scheduleds
+        .where("customer_id", customer_id)
+        .whereDoesntHave("review")
     }
 
     if (artist_id) {

@@ -25,7 +25,7 @@ class UserSeeder {
         password,
         role: 'ARTIST',
         cpf: '11011011011',
-        city_id: 1,
+        city_id: 5200050,
         address: 'Av. test, 404'
       }
     ])
