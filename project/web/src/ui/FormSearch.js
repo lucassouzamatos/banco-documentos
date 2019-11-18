@@ -17,6 +17,30 @@ const distance = [
     id: 30,
     title: '30km',
   },
+  {
+    id: 50,
+    title: '50km',
+  },
+  {
+    id: 100,
+    title: '100km',
+  },
+  {
+    id: 200,
+    title: '200km',
+  },
+  {
+    id: 300,
+    title: '300km',
+  },
+  {
+    id: 400,
+    title: '400km',
+  },
+  {
+    id: 500,
+    title: '500km',
+  },
 ];
 
 const sort = [

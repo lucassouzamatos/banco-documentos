@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 import { Form, Select } from '@rocketseat/unform';
 
 import { MdBookmark, MdPlace } from 'react-icons/md';
+import { toast } from 'react-toastify';
 import { ArtContainer, Button, Container, FormSearch } from '~/ui';
 import {
   Avatar,
@@ -17,6 +18,8 @@ import {
 import api from '~/services/api';
 import { useProfile } from '~/hooks';
 import toMoney from '~/utils/to-money';
+import toDate from '~/utils/to-date';
+import toTime from '~/utils/to-time';
 
 Modal.setAppElement('#root');
 
@@ -39,13 +42,7 @@ const HomeClient = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const [detailArt, setDetailArt] = useState({});
-
-  const schedules = [
-    {
-      id: 1,
-      title: '10 de dezembro de 2019',
-    },
-  ];
+  const [availableSchedules, setAvailableSchedules] = useState([]);
 
   const openModal = art => {
     const loadArt = async () => {
@@ -55,7 +52,20 @@ const HomeClient = () => {
       setIsModalOpen(true);
     };
 
+    const loadAvailableSchedule = async () => {
+      const response = await api.get(`schedule-dates?art_id=${art.id}`);
+      const { scheduledates } = response.data.data;
+
+      setAvailableSchedules(
+        scheduledates.map(schedule => ({
+          id: schedule.id,
+          title: `${toDate(schedule.date)} - ${toTime(schedule.date)}`,
+        }))
+      );
+    };
+
     loadArt();
+    loadAvailableSchedule();
   };
 
   useEffect(() => {
@@ -77,7 +87,38 @@ const HomeClient = () => {
   };
 
   const handleSubmit = data => {
+    async function loadArts() {
+      const response = await api.get(
+        `arts?distance=${data.distance}&title=${
+          data.busca
+        }&order_by=created_at&order=${data.id === 1 ? 'desc' : 'asc'}`
+      );
+
+      setArts(response.data.data.arts);
+    }
+
+    loadArts();
+
     console.log(data);
+  };
+
+  const requestSchedule = async data => {
+    const { schedule } = data;
+    const requestData = {
+      customer_id: profile.id,
+      schedule_date_id: schedule,
+      art_id: detailArt.id,
+    };
+
+    try {
+      const response = await api.post(`scheduleds`, requestData);
+      toast.success('Agendamento solicitado com sucesso');
+    } catch (error) {
+      toast.error('Houve um erro ao solicitar o agendamento.');
+    } finally {
+      setIsModalOpen(false);
+      setIsScheduleModalOpen(false);
+    }
   };
 
   return (
@@ -131,10 +172,16 @@ const HomeClient = () => {
           style={customStyles}
         >
           <h3>Selecione um horário</h3>
-          <Form>
-            <Select name="schedules" label="Horário" options={schedules} />
+          <Form onSubmit={requestSchedule}>
+            <Select
+              name="schedule"
+              label="Horário"
+              options={availableSchedules}
+            />
+            <Button background="#292C2F" type="submit">
+              Solicitar
+            </Button>
           </Form>
-          <Button background="#292C2F">Solicitar</Button>
         </Modal>
       </Modal>
       <BackgroundImage />

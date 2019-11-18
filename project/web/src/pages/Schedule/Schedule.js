@@ -64,6 +64,20 @@ const Schedule = () => {
     loadSchedule();
   }, [profile.id]);
 
+  const finalizeSchedule = async scheduledDate => {
+    try {
+      if (scheduledDate.scheduled) {
+        await api.put(`scheduleds/${scheduledDate.scheduled.id}`, {
+          done: true,
+        });
+      }
+
+      toast.success(`Agendamento finalizado com sucesso`);
+    } catch (error) {
+      toast.error('Ocorreu um erro ao atualizar o agendamento');
+    }
+  };
+
   return (
     <Container>
       <Modal
@@ -138,7 +152,10 @@ const Schedule = () => {
         {schedule &&
           schedule.scheduleDates &&
           schedule.scheduleDates.map(scheduleDate => (
-            <ScheduleItem key={scheduleDate.id}>
+            <ScheduleItem
+              key={scheduleDate.id}
+              booked={scheduleDate.scheduled && scheduleDate.scheduled.accepted}
+            >
               <ul>
                 <li>
                   <b>Data: </b>
@@ -151,11 +168,23 @@ const Schedule = () => {
                 </li>
 
                 <li>
-                  <b>Status: </b>Disponível
+                  <b>Status: </b>
+                  {scheduleDate.scheduled && scheduleDate.scheduled.accepted
+                    ? 'Reservado'
+                    : 'Disponível'}
                 </li>
               </ul>
 
-              <RemoveButton type="button">Remover</RemoveButton>
+              {scheduleDate.scheduled &&
+                scheduleDate.scheduled.accepted &&
+                !scheduleDate.scheduled.done && (
+                  <RemoveButton
+                    onClick={() => finalizeSchedule(scheduleDate)}
+                    type="button"
+                  >
+                    Finalizar Agendamento
+                  </RemoveButton>
+                )}
             </ScheduleItem>
           ))}
       </ScheduleContainer>

@@ -46,7 +46,7 @@ const ProfileEdit = () => {
         }))
       );
 
-      if (profile.city.state_id) {
+      if (profile.city && profile.city.state_id) {
         loadCities(profile.city.state_id);
       }
     }

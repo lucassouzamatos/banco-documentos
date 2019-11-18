@@ -43,7 +43,8 @@ const StyleSelector = ({ type }) => {
       user_id: profile.id,
     });
 
-    setUserStyles(response.data.data[type]);
+    const keyName = type === 'artist-styles' ? 'artistStyles' : 'interests';
+    setUserStyles(response.data.data[keyName]);
 
     toast.success('Estilo adicionado com sucesso');
   };

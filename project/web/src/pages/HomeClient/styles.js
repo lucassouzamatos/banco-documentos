@@ -57,6 +57,7 @@ export const ArtistInfo = styled.div`
   text-align: center;
   border-left: 1px solid #e8e8e8;
   padding: 8px 16px;
+  min-width: 250px;
 
   button {
     margin-top: 8px;

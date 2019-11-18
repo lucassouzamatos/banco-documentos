@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-// import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Form } from '@rocketseat/unform';
 
 import { toast } from 'react-toastify';
-// import api from '~/services/api';
+import api from '~/services/api';
 import { RegisterContainer, FlexContainer } from './styles';
 import { Button, Container, Input, Title } from '~/ui';
 
 const ReviewRegister = () => {
-  // const { id } = useParams();
+  const { id } = useParams();
 
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -23,7 +23,8 @@ const ReviewRegister = () => {
 
         formData.append('image', image);
         formData.append('type', 'REVIEW');
-        // await api.post(`arts`, formData);
+        formData.append('scheduled_id', id);
+        await api.post(`reviews`, formData);
 
         toast.success('Avaliação cadastrada com sucesso!');
       } catch (error) {
@@ -70,7 +71,7 @@ const ReviewRegister = () => {
 
           <FlexContainer>
             <Input id="title" type="text" required label="Título" />
-            <Input id="comment" type="text" required label="Comentário" />
+            <Input id="description" type="text" required label="Comentário" />
           </FlexContainer>
 
           <Button background="#292C2F" type="submit">
