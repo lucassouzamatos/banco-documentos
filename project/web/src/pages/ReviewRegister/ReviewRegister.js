@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import api from '~/services/api';
 import { RegisterContainer, FlexContainer } from './styles';
 import { Button, Container, Input, Title } from '~/ui';
+import history from '~/services/history';
 
 const ReviewRegister = () => {
   const { id } = useParams();
@@ -27,6 +28,7 @@ const ReviewRegister = () => {
         await api.post(`reviews`, formData);
 
         toast.success('Avaliação cadastrada com sucesso!');
+        history.push('/explore');
       } catch (error) {
         if (error.response.data.errors) {
           const errorsMessage = error.response.data.errors.reduce(

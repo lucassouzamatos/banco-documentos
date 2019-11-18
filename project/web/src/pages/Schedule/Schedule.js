@@ -96,12 +96,12 @@ const Schedule = () => {
         </Form>
       </Modal>
       <Title>Agenda</Title>
-      <CarouselProvider
+      {/* <CarouselProvider
         visibleSlides={3}
         totalSlides={11}
         step={3}
         naturalSlideWidth={100}
-        naturalSlideHeight={40}
+        naturalSlideHeight={60}
       >
         <SliderContainer>
           <Slider>
@@ -136,7 +136,7 @@ const Schedule = () => {
             <MdKeyboardArrowRight size={32} />
           </ButtonNext>
         </SliderContainer>
-      </CarouselProvider>
+      </CarouselProvider> */}
 
       <ButtonContainer>
         <Button
