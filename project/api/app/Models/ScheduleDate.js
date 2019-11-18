@@ -9,7 +9,7 @@ class ScheduleDate extends Model {
   }
 
   scheduled () {
-    return this.belongsTo('App/Models/Scheduled', 'id')
+    return this.hasOne('App/Models/Scheduled')
   }
 }
 
