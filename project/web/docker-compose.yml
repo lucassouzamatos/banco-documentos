@@ -1,0 +1,21 @@
+version: '3'
+
+networks:
+  inkin:
+    driver: bridge
+
+services:
+  web:
+    container_name: inkin_web
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - '3001:3000'
+    environment:
+      - NODE_ENV=development
+    networks:
+      - inkin

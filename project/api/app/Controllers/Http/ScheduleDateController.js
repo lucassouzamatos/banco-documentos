@@ -47,49 +47,36 @@ class ScheduleDateController extends BaseController {
   }
 
   /**
-   * Display a single scheduledate.
-   * GET scheduledates/:id
+   * Show a list of all scheduledates.
+   * GET scheduledates
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-  }
+  async index ({ request, response, view }) {
+    const { art_id } = request.get();
+    const scheduledates = ScheduleDate.query()
 
-  /**
-   * Render a form to update an existing scheduledate.
-   * GET scheduledates/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
+    if (art_id) {
+      scheduledates.whereHas("schedule", builder => {
+        builder.whereHas("user", builder => {
+          builder.whereHas("art", builder => {
+            builder.where("id", art_id)
+          })
+        })
+      })
+      .whereDoesntHave("scheduled")
+    }
 
-  /**
-   * Update scheduledate details.
-   * PUT or PATCH scheduledates/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
-   * Delete a scheduledate with id.
-   * DELETE scheduledates/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+    return this.responseSuccess({
+      response,
+      statusCode: 200,
+      data: {
+        scheduledates: await scheduledates.fetch()
+      }
+    });
   }
 }
 

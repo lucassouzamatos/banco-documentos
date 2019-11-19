@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import {
@@ -10,18 +9,21 @@ import {
   MdPeople,
   MdExplore,
 } from 'react-icons/md';
+import { useProfile } from '~/hooks';
 
 const HeaderArtist = () => {
-  const role = useSelector(state => state.user.profile.role);
+  const { role } = useProfile();
 
   return (
     <Container>
       <nav>
         <ul>
           <li>
-            <Link to="/artists">
-              <MdHome size={21} /> Home Page
-            </Link>
+            {role === 'ARTIST' && (
+              <Link to="/arts">
+                <MdHome size={21} /> Home Page
+              </Link>
+            )}
           </li>
           <li>
             <Link to="/profile">
@@ -49,7 +51,7 @@ const HeaderArtist = () => {
 
           {role === 'STUDIO' && (
             <li>
-              <Link to="/profile">
+              <Link to="/explore">
                 <MdExplore size={21} />
                 Explorar
               </Link>

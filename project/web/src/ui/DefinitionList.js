@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const DefinitionList = styled.h2`
+const DefinitionList = styled.dl`
   dt {
     font-size: 12px;
     color: rgba(0, 0, 0, 0.3);

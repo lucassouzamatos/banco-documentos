@@ -16,7 +16,7 @@ export const ScheduleContainer = styled.div`
 
 export const ScheduleItem = styled.div`
   border: 1px solid #e3e3e3;
-  border-left: 6px solid #299f20;
+  border-left: 6px solid ${props => (props.booked ? '#D5D5D5' : '#299f20')};
   color: #95989a;
   padding: 16px 24px;
   margin: 0 0 16px 16px;

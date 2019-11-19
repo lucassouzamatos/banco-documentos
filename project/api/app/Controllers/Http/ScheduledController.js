@@ -11,6 +11,35 @@ const BaseController = use("App/Controllers/Http/BaseController");
  * Resourceful controller for interacting with scheduleds
  */
 class ScheduledController extends BaseController {
+  async index({ response, request }) {
+    const { artist_id, customer_id } = request.get();
+
+    const scheduleds = Scheduled.query()
+      .with("art")
+
+    if (customer_id) {
+      scheduleds
+        .where("customer_id", customer_id)
+        .whereDoesntHave("review")
+    }
+
+    if (artist_id) {
+      scheduleds.whereHas("scheduleDates", builder => {
+        builder.whereHas("schedule", builder => {
+          builder.where("user_id", artist_id)
+        })
+      })
+    }
+
+    return this.responseSuccess({
+      response,
+      statusCode: 200,
+      data: {
+        scheduleds: await scheduleds.fetch()
+      }
+    });
+  }
+
   /**
    * Create/save a new scheduled.
    * POST scheduleds
@@ -22,7 +51,8 @@ class ScheduledController extends BaseController {
   async store ({ request, response }) {
     const data = request.only([
       "customer_id",
-      "schedule_date_id"
+      "schedule_date_id",
+      "art_id"
     ])
 
     if (!data.customer_id) {
@@ -42,9 +72,8 @@ class ScheduledController extends BaseController {
     }
 
     const scheduledExists = await Scheduled.query()
-    .where("customer_id", data.customer_id)
-    .where("schedule_date_id", data.schedule_date_id)
-    .first()
+      .where("schedule_date_id", data.schedule_date_id)
+      .first()
 
     if (scheduledExists) {
       return this.responseError({
@@ -63,30 +92,6 @@ class ScheduledController extends BaseController {
   }
 
   /**
-   * Display a single scheduled.
-   * GET scheduleds/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
-  }
-
-  /**
-   * Render a form to update an existing scheduled.
-   * GET scheduleds/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
    * Update scheduled details.
    * PUT or PATCH scheduleds/:id
    *
@@ -95,17 +100,31 @@ class ScheduledController extends BaseController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
-  }
+    const data = request.only([
+      "done",
+      "accepted",
+    ])
 
-  /**
-   * Delete a scheduled with id.
-   * DELETE scheduleds/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+    const scheduled = await Scheduled.findOrFail(params.id);
+
+    if (!scheduled) {
+      return this.responseError({
+        response,
+        statusCode: 400,
+        errors: ["Agendamento não encontrado"]
+      });
+    }
+
+    await scheduled.merge(data);
+    await scheduled.save();
+
+    return this.responseSuccess({
+      response,
+      statusCode: 200,
+      data: {
+        scheduled
+      }
+    });
   }
 }
 

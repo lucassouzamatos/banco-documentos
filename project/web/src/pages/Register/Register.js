@@ -19,7 +19,7 @@ const Register = () => {
   const [cities, setCities] = useState([]);
 
   useEffect(() => {
-    async function loadArtists() {
+    async function loadStates() {
       const response = await api.get(`states`);
 
       setStates(
@@ -29,7 +29,7 @@ const Register = () => {
         }))
       );
     }
-    loadArtists();
+    loadStates();
   }, []);
 
   function handleSubmit({

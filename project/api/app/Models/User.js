@@ -5,7 +5,7 @@ const Hash = use('Hash')
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
-const Schedule = use('App/Models/Style')
+const Schedule = use('App/Models/Schedule')
 
 class User extends Model {
   static boot () {
@@ -16,9 +16,9 @@ class User extends Model {
       }
     })
 
-    this.addHook('beforeCreate', async (userInstance) => {
-      if (userInstance.role === "ARTIST") {
-        Schedule.create({ user_id: userInstance.id })
+    this.addHook('afterCreate', async (userInstance) => {
+      if (userInstance.isArtist()) {
+        await Schedule.findOrCreate({ user_id: userInstance.id })
       }
     })
   }
@@ -43,6 +43,26 @@ class User extends Model {
 
   studioArtist () {
     return this.belongsTo('App/Models/StudioArtist', 'id', 'artist_id')
+  }
+
+  artistStyles () {
+    return this.hasMany('App/Models/ArtistStyle')
+  }
+
+  notifications () {
+    return this.hasMany('App/Models/Notification')
+  }
+
+  interests () {
+    return this.hasMany('App/Models/Interest')
+  }
+
+  art () {
+    return this.hasMany('App/Models/Art')
+  }
+
+  schedule () {
+    return this.belongsTo('App/Models/Schedule', 'id', 'user_id')
   }
 
   isStudio () {
