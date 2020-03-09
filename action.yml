@@ -1,8 +1,0 @@
-name: 'Build Front-end'
-description: 'Build Front-end'
-outputs:
-  time: # id da saída
-    description: 'The time'
-runs:
-  using: 'node12'
-  main: 'index.js'
